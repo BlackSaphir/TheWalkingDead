@@ -18,17 +18,14 @@ public class MapDisplay : MonoBehaviour
         {
             for (int x = 0; x < width; x++)
             {
-                // get colom and row + set color
-                ColorMap[y * width + x] = Color.Lerp(Color.black, Color.white, noiseMap[x, y]);
+                ColorMap[y * width + x] = Color.Lerp(Color.blue, Color.red, noiseMap[x, y]);
             }
         }
         texture.SetPixels(ColorMap);
         texture.Apply();
 
-        // apply texture to Renderer
         textureRenderer.sharedMaterial.mainTexture = texture;
         textureRenderer.transform.localScale = new Vector3(width, 1, height);
-
     }
 
 }

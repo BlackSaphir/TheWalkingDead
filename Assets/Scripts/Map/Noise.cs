@@ -9,7 +9,7 @@ public static class Noise
 
         if (scale <= 0)
         {
-            scale = 0.00001f;
+            scale = 0.0001f;
         }
 
         for (int y = 0; y < mapHeight; y++)
