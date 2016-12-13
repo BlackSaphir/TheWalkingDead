@@ -10,6 +10,9 @@ public class MapGenerator : MonoBehaviour
     public void GenerateMap()
     {
         float[,] noiseMap = Noise.GenerateNoiseMap(mapHeight, mapWidth, Noisescale);
+
+        MapDisplay display = FindObjectOfType<MapDisplay>();
+        display.DrawNoiseMap(noiseMap);
     }
 
 
