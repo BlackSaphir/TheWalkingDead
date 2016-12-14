@@ -67,7 +67,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
         void OnTriggerEnter(Collider Other)
         {
-            if (Other.gameObject.tag == ("item"))
+            if (Other.gameObject.tag == ("item_mobileradio"))
             {
                 IsColliding = true;
                 Item = Other.gameObject;
@@ -77,7 +77,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         void OnTriggerExit(Collider Other)
         {
             IsColliding = false;
-            Other = null;
+            Item = null;
         }
 
         //End Edit By Felix

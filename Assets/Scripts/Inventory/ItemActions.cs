@@ -6,27 +6,57 @@ using UnityStandardAssets.Characters.FirstPerson;
 public class ItemActions : MonoBehaviour
 {
     public GameObject PressE;
+    public GameObject InventoryFull;
     FirstPersonController Player;
     InventoryManager Manager;
+    public int Index;
+
+    IEnumerator InventoryFullMessage()
+    {
+        InventoryFull.SetActive(true);
+        yield return new WaitForSeconds(3);
+        InventoryFull.SetActive(false);
+    }
 
     public void CollectItem()
     {
         if (Player.IsColliding == true)
         {
-
-            PressE.SetActive(true);
-            if (Input.GetKey(KeyCode.E))
+            if (Player.Item.tag == ("item_mobileradio"))
             {
-                Player.Item.SetActive(false);
-                PressE.SetActive(false);
-               
+                PressE.SetActive(true);
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+
+                    if (Index < 5)
+                    {
+                        Destroy(Player.Item);
+                        Manager.InventoryList.Add(ItemTypes.mobileradio);
+                        Manager.UpdateList();
+                        Index++;
+                        Player.IsColliding = false;
+                    }
+                    else
+                    {
+                        StartCoroutine(InventoryFullMessage());   
+                    }
+                    PressE.SetActive(false);
+                }
             }
         }
+
         else
         {
             PressE.SetActive(false);
-          
+
         }
+
+    }
+
+
+    public void DropItem()
+    {
+
     }
 
     // Use this for initialization
@@ -42,4 +72,6 @@ public class ItemActions : MonoBehaviour
     {
         CollectItem();
     }
+
+
 }

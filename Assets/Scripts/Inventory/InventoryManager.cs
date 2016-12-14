@@ -2,17 +2,49 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ItemTypes { mobileradio, petrol, lightsources, key, cable, repairset };
+public enum ItemTypes { mobileradio, petrol, lightsources, key, cable, repairset, battery };
 
 public class InventoryManager : MonoBehaviour
 {
-    public ItemTypes MyItem;
-    public void Test(MyItem item)
+    public GameObject Slot1;
+    public GameObject Slot2;
+    public GameObject Slot3;
+    public GameObject Slot4;
+    public GameObject Slot5;
+
+    public List<ItemTypes> InventoryList;
+
+    //public ItemTypes MyItem;
+
+    public int PanelIndex;
+
+
+    public void UpdateList()
     {
-         switch(item.Item)
+        for (int i = 0; i < InventoryList.Count; i++)
         {
-            case ItemTypes.cable:
-            break;
+            switch (InventoryList[i])
+            {
+                case ItemTypes.mobileradio:
+                    GameObject temp = Instantiate(Resources.Load<GameObject>("mobileradio"));
+                    temp.transform.SetParent(Slot3.transform, false);
+                   
+                    break;
+                case ItemTypes.petrol:
+                    break;
+                case ItemTypes.lightsources:
+                    break;
+                case ItemTypes.key:
+                    break;
+                case ItemTypes.cable:
+                    break;
+                case ItemTypes.repairset:
+                    break;
+                case ItemTypes.battery:
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -28,9 +60,4 @@ public class InventoryManager : MonoBehaviour
     {
 
     }
-}
-
-public class MyItem
-{
-    public ItemTypes Item = ItemTypes.cable;
 }
