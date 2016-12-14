@@ -2,32 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IdleScript : StateMachineBehaviour
+public class AIAttack : StateMachineBehaviour
 {
-    float distance;
     AIAgent AIObject;
-    //OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
+    float distance;
+    // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-
         AIObject = animator.GetComponent<AIAgent>();
-
     }
 
-    //OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
-
+    // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         distance = AIObject.distance;
-        if (distance <= 10.0f)
+        if (distance > 1f)
         {
-            animator.SetBool("targetInSight", true);
+            animator.SetBool("targetInRange", false);
         }
-        AIObject.Patrol();
     }
 
-    //OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-
+    // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
 
@@ -42,6 +37,4 @@ public class IdleScript : StateMachineBehaviour
     //override public void OnStateIK(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
     //
     //}
-
-
 }
