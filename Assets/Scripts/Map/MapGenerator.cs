@@ -23,8 +23,8 @@ public class MapGenerator : MonoBehaviour
     public AnimationCurve meshHeightCurve;
     public bool autoUpdate;
 
-    private int mapWidht = 100;
-    private int mapHeight = 100;
+    private int mapWidht = 110;
+    private int mapHeight = 110;
    
 
     void Start()
@@ -55,6 +55,10 @@ public class MapGenerator : MonoBehaviour
                     if (currentHeight <= regions[i].height)
                     {
                         colorMap[y * mapWidht + x] = regions[i].color;
+                        if (regions[i].name == "Land")
+                        {
+
+                        }
                         break;
                     }
                 }
