@@ -31,14 +31,15 @@ public class ItemActions : MonoBehaviour
                     if (Index < 5)
                     {
                         Destroy(Player.Item);
-                        Manager.InventoryList.Add(ItemTypes.mobileradio);
+                        Manager.PickUp = ItemTypes.mobileradio;
+
                         Manager.UpdateList();
                         Index++;
                         Player.IsColliding = false;
                     }
                     else
                     {
-                        StartCoroutine(InventoryFullMessage());   
+                        StartCoroutine(InventoryFullMessage());
                     }
                     PressE.SetActive(false);
                 }

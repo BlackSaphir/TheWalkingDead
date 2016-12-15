@@ -1,20 +1,28 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.Characters.FirstPerson;
 
-public enum ItemTypes { mobileradio, petrol, lightsources, key, cable, repairset, battery };
+public enum ItemTypes { empty, mobileradio, petrol, lightsources, key, cable, repairset, battery };
 
 public class InventoryManager : MonoBehaviour
 {
-    public GameObject Slot1;
-    public GameObject Slot2;
-    public GameObject Slot3;
-    public GameObject Slot4;
-    public GameObject Slot5;
+    public ItemActions ItemActions;
+    public FirstPersonController Player;
+    public ItemTypes PickUp;
+    public GameObject ParentPanel;
+    public Vector3 Initial;
+    public int Delta = 45;
+    public GameObject Rectangle;
+    public int index;
+    private GameObject[] array;
+    private GameObject RecTemp;
+
+
+
+
 
     public List<ItemTypes> InventoryList;
-
-    //public ItemTypes MyItem;
 
     public int PanelIndex;
 
@@ -23,41 +31,112 @@ public class InventoryManager : MonoBehaviour
     {
         for (int i = 0; i < InventoryList.Count; i++)
         {
-            switch (InventoryList[i])
+            if (InventoryList[i] == ItemTypes.empty)
             {
-                case ItemTypes.mobileradio:
-                    GameObject temp = Instantiate(Resources.Load<GameObject>("mobileradio"));
-                    temp.transform.SetParent(Slot3.transform, false);
-                   
-                    break;
-                case ItemTypes.petrol:
-                    break;
-                case ItemTypes.lightsources:
-                    break;
-                case ItemTypes.key:
-                    break;
-                case ItemTypes.cable:
-                    break;
-                case ItemTypes.repairset:
-                    break;
-                case ItemTypes.battery:
-                    break;
-                default:
-                    break;
+                InventoryList[i] = PickUp;
+
+                switch (InventoryList[i])
+                {
+                    case ItemTypes.mobileradio:
+                        GameObject temp = Instantiate(Resources.Load<GameObject>("mobileradio_texture"));
+                        temp.transform.position = Initial + Vector3.down * Delta * i;
+                        array[i] = temp;
+                        temp.transform.SetParent(ParentPanel.transform, false);
+
+                        break;
+                    case ItemTypes.petrol:
+                        break;
+                    case ItemTypes.lightsources:
+                        break;
+                    case ItemTypes.key:
+                        break;
+                    case ItemTypes.cable:
+                        break;
+                    case ItemTypes.repairset:
+                        break;
+                    case ItemTypes.battery:
+                        break;
+                    default:
+                        break;
+                }
+                break;
             }
         }
+        SetRectPosition(0);
+    }
+
+    public void SetRectPosition(int inventorySlot)
+    {
+        if (RecTemp == null)
+        {
+            RecTemp = Instantiate(Rectangle);
+        }
+
+        if (array[inventorySlot] != null)
+        {
+            RecTemp.transform.SetParent(array[inventorySlot].transform, false);
+        }
+    }
+
+    public void SelectItem()
+    {
+        for (int i = 0; i < array.Length; i++)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1 + i))
+            {
+                Moveselector(i);
+            }
+        }
+    }
+
+    public void DropItem(int index)
+    {
+        if (array[this.index] != null)
+        {
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                int next = (this.index + 1) % array.Length;
+
+                if (array[this.index] != null /*&& array[next] != null*/)
+                {
+                    ItemActions.Index--;
+                    InventoryList[this.index] = ItemTypes.empty;
+                    Instantiate(Resources.Load<GameObject>("mobileradio_object"), new Vector3(Player.transform.position.x, Player.transform.position.y, Player.transform.position.z), Quaternion.identity);
+
+                    Destroy(array[this.index]);
+                    array[this.index] = null;
+                    Moveselector(next);
+                }
+            }
+        }
+    }
+
+    void Moveselector(int tslot)
+    {
+        for (int i = 0; i < array.Length; i++)
+        {
+            int currentIndex = (tslot + i) % array.Length;
+            if (array[currentIndex] != null)
+            {
+                SetRectPosition(currentIndex);
+                index = currentIndex;
+                return;
+            }
+        }
+        index = 0;
     }
 
     // Use this for initialization
     void Start()
     {
-
-
+        ItemActions = GetComponent<ItemActions>();
+        array = new GameObject[5];
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        SelectItem();
+        DropItem(index);
     }
 }
