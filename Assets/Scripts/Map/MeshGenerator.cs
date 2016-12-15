@@ -18,7 +18,7 @@ public static class MeshGenerator
         {
             for (int x = 0; x < widht; x++)
             {
-                meshData.vertices[vertexIndex] = new Vector3(topLeftX + x,heightCurve.Evaluate( heightMap[x, y]) * heightMultiplier, topLeftZ - y);
+                meshData.vertices[vertexIndex] = new Vector3(topLeftX + x, heightCurve.Evaluate(heightMap[x, y]) * heightMultiplier, topLeftZ - y);
                 meshData.uvs[vertexIndex] = new Vector2(x / (float)widht, y / (float)height);
 
                 if (x < widht - 1 && y < height - 1)

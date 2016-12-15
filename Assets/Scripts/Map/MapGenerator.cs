@@ -3,13 +3,14 @@ using System.Collections;
 
 public class MapGenerator : MonoBehaviour
 {
-    public enum drawMode { noiseMap, colorMap, Mesh};
+    public enum drawMode { noiseMap, colorMap, Mesh };
     public drawMode DrawMode;
     public int mapWidht;
     public int mapHeight;
+    [Range(25, 100)]
     public float noisescale;
     public int octaves;
-    [Range(0,1)]
+    [Range(0, 1)]
     public float persistance;
     public float lacunarity;
     public int seed;
@@ -51,20 +52,20 @@ public class MapGenerator : MonoBehaviour
             display.DrawTexture(TextureGenerator.TextureFromColorMap(colorMap, mapWidht, mapHeight));
 
         }
-        else if (DrawMode == drawMode.Mesh )
+        else if (DrawMode == drawMode.Mesh)
         {
             display.DrawMesh(MeshGenerator.GenerateTerrainMesh(noiseMap, meshHeightMultiplier, meshHeightCurve), TextureGenerator.TextureFromColorMap(colorMap, mapWidht, mapHeight));
         }
     }
 
-    void OnValidate ()
+    void OnValidate()
     {
         if (mapWidht < 1)
         {
             mapWidht = 1;
         }
 
-        if (mapHeight <1)
+        if (mapHeight < 1)
         {
             mapHeight = 1;
         }
