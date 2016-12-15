@@ -5,20 +5,39 @@ public class MapGenerator : MonoBehaviour
 {
     public enum drawMode { noiseMap, colorMap, Mesh };
     public drawMode DrawMode;
-    public int mapWidht;
-    public int mapHeight;
-    [Range(25, 100)]
+    //const int mapChunkSize = 241;
+    [Range(25, 60)]
     public float noisescale;
+    [Range(1,15)]
     public int octaves;
-    [Range(0, 1)]
+    [Range(0.0f, 0.2f)]
     public float persistance;
+    [Range(1,9)]
     public float lacunarity;
+    [Range(1,150)]
     public int seed;
+    [Range(100,270)]
+    public float meshHeightMultiplier;
     public Vector2 offset;
     public TerrainType[] regions;
-    public float meshHeightMultiplier;
     public AnimationCurve meshHeightCurve;
     public bool autoUpdate;
+
+    private int mapWidht = 100;
+    private int mapHeight = 100;
+   
+
+    void Start()
+    {
+        
+        noisescale = Random.Range(25, 60);
+        octaves = Random.Range(1, 15);
+        persistance = Random.Range(0.0f, 0.2f);
+        lacunarity = Random.Range(1, 9);
+        seed = Random.Range(1, 150);
+        meshHeightMultiplier = Random.Range(100, 270);
+        GenerateMap();
+    }
 
     public void GenerateMap()
     {
@@ -72,7 +91,7 @@ public class MapGenerator : MonoBehaviour
 
         if (octaves < 0)
         {
-            octaves = 0;
+            octaves = 1;
         }
 
         if (lacunarity < 1)
