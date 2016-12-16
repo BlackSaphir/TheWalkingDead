@@ -8,28 +8,29 @@ public class MapGenerator : MonoBehaviour
     //const int mapChunkSize = 241;
     [Range(25, 60)]
     public float noisescale;
-    [Range(1,15)]
+    [Range(1, 15)]
     public int octaves;
     [Range(0.0f, 0.2f)]
     public float persistance;
-    [Range(1,9)]
+    [Range(1, 9)]
     public float lacunarity;
-    [Range(1,150)]
+    [Range(1, 150)]
     public int seed;
-    [Range(100,270)]
+    [Range(100, 270)]
     public float meshHeightMultiplier;
     public Vector2 offset;
     public TerrainType[] regions;
     public AnimationCurve meshHeightCurve;
+    public Transform tree;
     public bool autoUpdate;
 
     private int mapWidht = 110;
     private int mapHeight = 110;
-   
+
 
     void Start()
     {
-        
+
         noisescale = Random.Range(25, 60);
         octaves = Random.Range(1, 15);
         persistance = Random.Range(0.0f, 0.2f);
@@ -55,10 +56,6 @@ public class MapGenerator : MonoBehaviour
                     if (currentHeight <= regions[i].height)
                     {
                         colorMap[y * mapWidht + x] = regions[i].color;
-                        if (regions[i].name == "Land")
-                        {
-
-                        }
                         break;
                     }
                 }
@@ -103,6 +100,22 @@ public class MapGenerator : MonoBehaviour
             lacunarity = 1;
         }
     }
+
+
+
+
+    //public void PlaceTree()
+    //{
+    //    if (regions[].height == 0.45f)
+    //    {
+    //        for (int x = 0; x <; x++)
+    //        {
+
+    //        }
+    //        Instantiate(tree, new Vector3(), Quaternion.identity);
+    //    }
+
+    //}
 }
 
 // Region Settings 
@@ -113,3 +126,4 @@ public struct TerrainType
     public float height;
     public Color color;
 }
+
