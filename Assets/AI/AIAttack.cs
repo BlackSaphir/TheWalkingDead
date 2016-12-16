@@ -16,7 +16,7 @@ public class AIAttack : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         distance = AIObject.distance;
-        if (distance > 1f)
+        if (distance > 3f)
         {
             animator.SetBool("targetInRange", false);
         }

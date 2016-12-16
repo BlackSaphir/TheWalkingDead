@@ -34,7 +34,7 @@ public class AIAgent : MonoBehaviour
         //this.transform.LookAt(target);
         //this.transform.Translate(offset*Time.deltaTime);
         this.transform.LookAt(target);
-        this.transform.Translate(Vector3.forward * Time.deltaTime);
+        this.transform.Translate(Vector3.forward * Time.deltaTime);        
     }
 
     public Vector3 SetTarget()
