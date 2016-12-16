@@ -39,7 +39,7 @@ public class AIAgent : MonoBehaviour
 
     public Vector3 SetTarget()
     {
-        target = new Vector3(Random.Range(this.transform.position.x - 10, this.transform.position.x + 20), 0, Random.Range(this.transform.position.z - 10, this.transform.position.z + 20));
+        target = new Vector3(Random.Range(this.transform.position.x - 10, this.transform.position.x + 10), 0, Random.Range(this.transform.position.z - 10, this.transform.position.z + 10));
         
         return target;
     }
