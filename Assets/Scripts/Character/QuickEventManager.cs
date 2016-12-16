@@ -7,20 +7,20 @@ public class QuickEventManager : MonoBehaviour
     public float ForwardMovement;
     public float SideMovement;
     public bool CanMove;
-    public int QuickEventCounter;
+    public bool QuickEventDone;
     public bool ItsTimeForQuicky;
     public float DeathTimer;
-    public bool StartDeathTimer;
-    public int CountToFree;
-    public Object[] EnemyInsideTrigger;
+    public bool StartDeathTimer;   
+    public KeyCode[] QuickEventButtons;    
+    int Index;   
 
     // Use this for initialization
     void Start()
     {
         CanMove = true;
         DeathTimer = 0;
-        StartDeathTimer = false;
-        CountToFree = 10;
+        StartDeathTimer = false;        
+        QuickEventDone = false;
     }
 
     // Update is called once per frame
@@ -35,19 +35,27 @@ public class QuickEventManager : MonoBehaviour
         }
         if (ItsTimeForQuicky)
         {
-            if (Input.GetKeyDown(KeyCode.Q))
+            if (Input.anyKeyDown)
             {
-                if (Input.GetKeyDown(KeyCode.E))
+                KeyCode Temp = QuickEventButtons[Index];
+                if (Input.GetKeyDown(Temp))
                 {
-                    QuickEventCounter++;
+                    Debug.Log("Button is pressed");
+                    Index++;
+                    if (Index == QuickEventButtons.Length)
+                    {
+                        QuickEventDone = true;
+                    }
                 }
+                else
+                    Destroy(this.gameObject);
             }
         }
         if (StartDeathTimer)
         {
             DeathTimer += Time.deltaTime;
         }
-        if (DeathTimer > 5 && QuickEventCounter <= CountToFree)
+        if (DeathTimer > 5 && !QuickEventDone)
         {
             Destroy(this.gameObject);
         }
@@ -57,17 +65,15 @@ public class QuickEventManager : MonoBehaviour
     {
         if (other.gameObject.tag == "Enemy")
         {
-
+            ItsTimeForQuicky = true;
             StartDeathTimer = true;
-            QuickEventCounter = 0;
-            Debug.Log("Press Q + E");
+            QuickEventDone = false;
             CanMove = false;
         }
     }
     public void OnTriggerStay(Collider other)
     {
-        ItsTimeForQuicky = true;
-        if (QuickEventCounter >= CountToFree)
+        if (QuickEventDone)
         {
             CanMove = true;
             DeathTimer = 0;
