@@ -1,26 +1,32 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class QuickEventManager : MonoBehaviour
 {
+    public GameObject QuickEventText;
     public float ForwardMovement;
     public float SideMovement;
     public bool CanMove;
     public bool QuickEventDone;
     public bool ItsTimeForQuicky;
     public float DeathTimer;
-    public bool StartDeathTimer;   
-    public KeyCode[] QuickEventButtons;    
-    int Index;   
+    public bool StartDeathTimer;
+    public KeyCode[] QuickEventButtons;
+    public bool RightButtonPressed;
+    public Text Text;
+    int Index;
 
     // Use this for initialization
     void Start()
     {
         CanMove = true;
         DeathTimer = 0;
-        StartDeathTimer = false;        
+        StartDeathTimer = false;
         QuickEventDone = false;
+        RightButtonPressed = false;
+        QuickEventText.SetActive(false);
     }
 
     // Update is called once per frame
@@ -35,20 +41,31 @@ public class QuickEventManager : MonoBehaviour
         }
         if (ItsTimeForQuicky)
         {
-            if (Input.anyKeyDown)
+            if (Index < QuickEventButtons.Length)
             {
-                KeyCode Temp = QuickEventButtons[Index];
-                if (Input.GetKeyDown(Temp))
+
+                QuickEventText.SetActive(true);
+                Text.text = "Press " + QuickEventButtons[Index].ToString();
+                if (Input.anyKeyDown)
                 {
-                    Debug.Log("Button is pressed");
-                    Index++;
-                    if (Index == QuickEventButtons.Length)
+                    KeyCode Temp = QuickEventButtons[Index];
+                    if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D))
                     {
-                        QuickEventDone = true;
+                        //Ignore W,A,S,D bei Quick Event                    
                     }
+                    else if (Input.GetKeyDown(Temp))
+                    {
+                        RightButtonPressed = true;                        
+                        Index++;
+                        if (Index == QuickEventButtons.Length)
+                        {
+                            Text.text = "Run Bitch Run";
+                            QuickEventDone = true;                                                      
+                        }
+                    }
+                    else
+                        Destroy(this.gameObject);
                 }
-                else
-                    Destroy(this.gameObject);
             }
         }
         if (StartDeathTimer)
@@ -74,10 +91,16 @@ public class QuickEventManager : MonoBehaviour
     public void OnTriggerStay(Collider other)
     {
         if (QuickEventDone)
-        {
+        {            
             CanMove = true;
             DeathTimer = 0;
-            StartDeathTimer = false;
+            StartDeathTimer = false;           
         }
+    }
+    public void OnTriggerExit(Collider other)
+    {
+        ItsTimeForQuicky = false;
+        QuickEventText.SetActive(false);
+        Index = 0;
     }
 }
