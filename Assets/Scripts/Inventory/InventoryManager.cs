@@ -122,7 +122,6 @@ public class InventoryManager : MonoBehaviour
             if (array[this.index] != null)
             {
                 int next = (this.index + 1) % array.Length;
-
                 if (array[this.index] != null)
                 {
                     if (InventoryList[this.index] == ItemTypes.petrol)
@@ -130,6 +129,11 @@ public class InventoryManager : MonoBehaviour
                         ItemActions.PressEuse.SetActive(true);
                         if (Input.GetKeyDown(KeyCode.E))
                         {
+                            // Was soll passieren hier hin
+                            ItemActions.Oil_Tank_Progressbar.GetComponent<Image>().enabled = true;
+                            ItemActions.StartCoroutine(ItemActions.Progressbar());
+                                
+                            //
                             ItemActions.Index--;
                             InventoryList[this.index] = ItemTypes.empty;
                             Destroy(array[this.index]);
