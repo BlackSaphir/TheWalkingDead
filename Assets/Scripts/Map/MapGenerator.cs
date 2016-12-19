@@ -16,7 +16,7 @@ public class MapGenerator : MonoBehaviour
     public float lacunarity;
     [Range(1, 150)]
     public int seed;
-    [Range(100, 270)]
+    [Range(140, 270)]
     public float meshHeightMultiplier;
     public Vector2 offset;
     public TerrainType[] regions;
@@ -24,8 +24,8 @@ public class MapGenerator : MonoBehaviour
     public Transform tree;
     public bool autoUpdate;
 
-    private int mapWidht = 110;
-    private int mapHeight = 110;
+    private int mapWidht = 180;
+    private int mapHeight = 180;
 
 
     void Start()
@@ -36,7 +36,7 @@ public class MapGenerator : MonoBehaviour
         persistance = Random.Range(0.0f, 0.2f);
         lacunarity = Random.Range(1, 9);
         seed = Random.Range(1, 150);
-        meshHeightMultiplier = Random.Range(100, 270);
+        meshHeightMultiplier = Random.Range(140, 270);
         GenerateMap();
     }
 
