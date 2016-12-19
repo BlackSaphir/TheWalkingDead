@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: d04d449dfd8dd014ba4b4444277b0c59
 timeCreated: 1481719060
+=======
+guid: b5b448ab22ea9254f96191f933ad38bd
+timeCreated: 1481641810
+>>>>>>> feature/Inventory2
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
