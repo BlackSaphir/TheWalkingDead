@@ -62,16 +62,34 @@ namespace UnityStandardAssets.Characters.FirstPerson
         //Edit By Felix
         public bool IsColliding;
         public GameObject Item;
+        public bool IsColliding_OilTrigger;
         
         
 
         void OnTriggerEnter(Collider Other)
         {
+            if (Other.gameObject.tag == ("barrel_empty"))
+            {
+                IsColliding = true;
+                Item = Other.gameObject;
+            }
+            else
+            if (Other.gameObject.tag == ("Oil_tank_trigger"))
+            {
+                IsColliding_OilTrigger = true;
+            }
             if (Other.gameObject.tag == ("item_mobileradio"))
             {
                 IsColliding = true;
                 Item = Other.gameObject;
             }
+            else
+            if(Other.gameObject.tag == ("item_petrol"))
+            {
+                IsColliding = true;
+                Item = Other.gameObject;
+            }
+
         }
 
         void OnTriggerExit(Collider Other)
