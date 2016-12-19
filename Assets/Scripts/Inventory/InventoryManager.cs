@@ -16,7 +16,7 @@ public class InventoryManager : MonoBehaviour
     public int Delta = 45;
     public GameObject Rectangle;
     public int index;
-    private GameObject[] array;
+    public GameObject[] array;
     private GameObject RecTemp;
 
 
@@ -117,21 +117,27 @@ public class InventoryManager : MonoBehaviour
 
     public void UseItem(int index)
     {
-        if (array[this.index] != null)
+        if (Player.IsColliding_OilTrigger == true)
         {
-            if (Input.GetKeyDown(KeyCode.F))
+            if (array[this.index] != null)
             {
                 int next = (this.index + 1) % array.Length;
 
                 if (array[this.index] != null)
                 {
-                    ItemActions.Index--;
-                    string ItemName = InventoryList[this.index].ToString();
-                    InventoryList[this.index] = ItemTypes.empty;
-                    Instantiate(Resources.Load<GameObject>(ItemName + "_object"), new Vector3(Player.transform.position.x, Player.transform.position.y - 1, Player.transform.position.z), Quaternion.identity);
-                    Destroy(array[this.index]);
-                    array[this.index] = null;
-                    Moveselector(next);
+                    if (InventoryList[this.index] == ItemTypes.petrol)
+                    {
+                        ItemActions.PressEuse.SetActive(true);
+                        if (Input.GetKeyDown(KeyCode.E))
+                        {
+                            ItemActions.Index--;
+                            InventoryList[this.index] = ItemTypes.empty;
+                            Destroy(array[this.index]);
+                            array[this.index] = null;
+                            Moveselector(next);
+                            ItemActions.PressEuse.SetActive(false);
+                        }
+                    }
                 }
             }
         }
@@ -165,5 +171,6 @@ public class InventoryManager : MonoBehaviour
     {
         SelectItem();
         DropItem(index);
+        UseItem(index);
     }
 }

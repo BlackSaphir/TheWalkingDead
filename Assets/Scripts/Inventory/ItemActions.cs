@@ -92,13 +92,17 @@ public class ItemActions : MonoBehaviour
     }
 
 
-    public void UseItem()
-    {
-        if (Player.IsColliding_OilTrigger == true)
-        {
-            PressEuse.SetActive(true);
-        }
-    }
+    //public void UseItem()
+    //{
+    //    if (Player.IsColliding_OilTrigger == true)
+    //    {
+    //        if (Manager.array[])
+    //        {
+
+    //        }
+    //        PressEuse.SetActive(true);
+    //    }
+    //}
 
     // Use this for initialization
     void Start()
@@ -112,6 +116,7 @@ public class ItemActions : MonoBehaviour
     void Update()
     {
         CollectItem();
+       // UseItem();
     }
 
 
