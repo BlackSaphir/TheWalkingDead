@@ -18,7 +18,7 @@ public class AIMoveToTarget : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         distance = AIObject.distance;
-        if (distance <= 1f)
+        if (distance <= 3f)
         {
             animator.SetBool("targetInRange", true);
         }
@@ -26,7 +26,8 @@ public class AIMoveToTarget : StateMachineBehaviour
         {
             animator.SetBool("targetInSight", false);
         }
-        animator.gameObject.transform.LookAt(Player.transform.position);
+        var targetrotation = Quaternion.LookRotation(Player.transform.position - animator.gameObject.transform.position, Vector3.up);
+        animator.gameObject.transform.rotation = Quaternion.Slerp(animator.gameObject.transform.rotation, targetrotation, Time.deltaTime * 2f);
         animator.gameObject.transform.Translate(Vector3.forward * Time.deltaTime);
     }
 
