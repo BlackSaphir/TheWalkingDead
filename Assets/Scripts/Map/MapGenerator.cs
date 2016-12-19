@@ -24,8 +24,8 @@ public class MapGenerator : MonoBehaviour
     public Transform tree;
     public bool autoUpdate;
 
-    private int mapWidht = 180;
-    private int mapHeight = 180;
+    public static int mapWidht = 180;
+    public static int mapHeight = 180;
 
 
     void Start()
@@ -75,6 +75,7 @@ public class MapGenerator : MonoBehaviour
         else if (DrawMode == drawMode.Mesh)
         {
             display.DrawMesh(MeshGenerator.GenerateTerrainMesh(noiseMap, meshHeightMultiplier, meshHeightCurve), TextureGenerator.TextureFromColorMap(colorMap, mapWidht, mapHeight));
+            display.DrawTexture(TextureGenerator.TextureFromColorMap(colorMap, mapWidht, mapHeight));
         }
     }
 
