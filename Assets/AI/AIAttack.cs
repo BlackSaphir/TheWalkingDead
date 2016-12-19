@@ -5,10 +5,12 @@ using UnityEngine;
 public class AIAttack : StateMachineBehaviour
 {
     AIAgent AIObject;
+    GameObject Player;
     float distance;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        Player = animator.gameObject.GetComponent<AIAgent>().Player;
         AIObject = animator.GetComponent<AIAgent>();
     }
 
@@ -20,6 +22,8 @@ public class AIAttack : StateMachineBehaviour
         {
             animator.SetBool("targetInRange", false);
         }
+        var targetrotation = Quaternion.LookRotation(Player.transform.position - animator.gameObject.transform.position, Vector3.up);
+        animator.gameObject.transform.rotation = Quaternion.Slerp(animator.gameObject.transform.rotation, targetrotation, Time.deltaTime * 2f);
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
