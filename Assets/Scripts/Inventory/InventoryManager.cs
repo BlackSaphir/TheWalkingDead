@@ -15,18 +15,12 @@ public class InventoryManager : MonoBehaviour
     public Vector3 Initial;
     public int Delta = 45;
     public GameObject Rectangle;
+    public GameObject Containerdoor;
     public int index;
-    public GameObject[] array;
+    public GameObject[] Inventory;
     private GameObject RecTemp;
-
-
-
-
-
     public List<ItemTypes> InventoryList;
-
     public int PanelIndex;
-
 
     public void UpdateList()
     {
@@ -41,27 +35,39 @@ public class InventoryManager : MonoBehaviour
                     case ItemTypes.mobileradio:
                         GameObject temp = Instantiate(Resources.Load<GameObject>("mobileradio_texture"));
                         temp.transform.position = Initial + Vector3.down * Delta * i;
-                        array[i] = temp;
+                        Inventory[i] = temp;
                         temp.transform.SetParent(ParentPanel.transform, false);
                         break;
                     case ItemTypes.petrol:
                         GameObject temp1 = Instantiate(Resources.Load<GameObject>("petrol_texture"));
                         temp1.transform.position = Initial + Vector3.down * Delta * i;
-                        array[i] = temp1;
+                        Inventory[i] = temp1;
                         temp1.transform.SetParent(ParentPanel.transform, false);
                         break;
                     case ItemTypes.lightsources:
                         break;
                     case ItemTypes.key:
+                        GameObject temp3 = Instantiate(Resources.Load<GameObject>("key_texture"));
+                        temp3.transform.position = Initial + Vector3.down * Delta * i;
+                        Inventory[i] = temp3;
+                        temp3.transform.SetParent(ParentPanel.transform, false);
                         break;
                     case ItemTypes.cable:
+                        GameObject temp4 = Instantiate(Resources.Load<GameObject>("cable_texture"));
+                        temp4.transform.position = Initial + Vector3.down * Delta * i;
+                        Inventory[i] = temp4;
+                        temp4.transform.SetParent(ParentPanel.transform, false);
                         break;
                     case ItemTypes.repairset:
+                        GameObject temp5 = Instantiate(Resources.Load<GameObject>("repairset_texture"));
+                        temp5.transform.position = Initial + Vector3.down * Delta * i;
+                        Inventory[i] = temp5;
+                        temp5.transform.SetParent(ParentPanel.transform, false);
                         break;
                     case ItemTypes.battery:
                         GameObject temp6 = Instantiate(Resources.Load<GameObject>("battery_texture"));
                         temp6.transform.position = Initial + Vector3.down * Delta * i;
-                        array[i] = temp6;
+                        Inventory[i] = temp6;
                         temp6.transform.SetParent(ParentPanel.transform, false);
                         break;
                     default:
@@ -80,15 +86,15 @@ public class InventoryManager : MonoBehaviour
             RecTemp = Instantiate(Rectangle);
         }
 
-        if (array[inventorySlot] != null)
+        if (Inventory[inventorySlot] != null)
         {
-            RecTemp.transform.SetParent(array[inventorySlot].transform, false);
+            RecTemp.transform.SetParent(Inventory[inventorySlot].transform, false);
         }
     }
 
     public void SelectItem()
     {
-        for (int i = 0; i < array.Length; i++)
+        for (int i = 0; i < Inventory.Length; i++)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1 + i))
             {
@@ -99,92 +105,32 @@ public class InventoryManager : MonoBehaviour
 
     public void DropItem(int index)
     {
-        if (array[this.index] != null)
+        if (Inventory[this.index] != null)
         {
             if (Input.GetKeyDown(KeyCode.F))
             {
-                int next = (this.index + 1) % array.Length;
+                int next = (this.index + 1) % Inventory.Length;
 
-                if (array[this.index] != null)
+                if (Inventory[this.index] != null)
                 {
                     ItemActions.Index--;
                     string ItemName = InventoryList[this.index].ToString();
                     InventoryList[this.index] = ItemTypes.empty;
                     Instantiate(Resources.Load<GameObject>(ItemName + "_object"), new Vector3(Player.transform.position.x, Player.transform.position.y - 1, Player.transform.position.z), Quaternion.identity);
-                    Destroy(array[this.index]);
-                    array[this.index] = null;
+                    Destroy(Inventory[this.index]);
+                    Inventory[this.index] = null;
                     Moveselector(next);
                 }
             }
         }
     }
 
-    public void UseItem(int index)
-    {
-        if (Player.IsColliding_OilTrigger == true)
-        {
-            if (array[this.index] != null)
-            {
-                int next = (this.index + 1) % array.Length;
-                if (array[this.index] != null)
-                {
-                    //Use Petrol
-                    if (InventoryList[this.index] == ItemTypes.petrol)
-                    {
-                        ItemActions.PressEuse.SetActive(true);
-                        if (Input.GetKeyDown(KeyCode.E))
-                        {
-                            // Was soll passieren hier hin
-                            ItemActions.Oil_Tank_Progressbar.GetComponent<Image>().enabled = true;
-                            ItemActions.StartCoroutine(ItemActions.Progressbar());
-                            //
-                            ItemActions.Index--;
-                            InventoryList[this.index] = ItemTypes.empty;
-                            Destroy(array[this.index]);
-                            array[this.index] = null;
-                            Moveselector(next);
-                            ItemActions.PressEuse.SetActive(false);
-                        }
-                    }
-                }
-            }
-        }
-        else
-        //Use mobileradio and Baterie;
-        if (Player.IsColliding_BaseTrigger && InventoryList.Contains(ItemTypes.battery) && InventoryList.Contains(ItemTypes.mobileradio))
-        {
-            if (array[this.index] != null)
-            {
-                int next = (this.index + 1) % array.Length;
-                if (array[this.index] != null)
-                {
-                    ItemActions.PressErepair.SetActive(true);
-                    if (Input.GetKeyDown(KeyCode.E))
-                    {
-                        //Was soll passieren hier rein
-
-                        //
-                        ItemActions.Index--;
-                        int indexBaterie = InventoryList.FindIndex(a => a == ItemTypes.battery);
-                        InventoryList[indexBaterie] = ItemTypes.empty;
-                        Destroy(array[indexBaterie]);
-                        array[indexBaterie] = null;
-                        Moveselector(next);
-                        ItemActions.PressErepair.SetActive(false);
-                    }
-                }
-            }
-
-        }
-        
-    }
-
     void Moveselector(int tslot)
     {
-        for (int i = 0; i < array.Length; i++)
+        for (int i = 0; i < Inventory.Length; i++)
         {
-            int currentIndex = (tslot + i) % array.Length;
-            if (array[currentIndex] != null)
+            int currentIndex = (tslot + i) % Inventory.Length;
+            if (Inventory[currentIndex] != null)
             {
                 SetRectPosition(currentIndex);
                 index = currentIndex;
@@ -195,14 +141,138 @@ public class InventoryManager : MonoBehaviour
         index = 0;
     }
 
-    // Use this for initialization
+    public void UseItem(int index)
+
+    {
+        //Use Petrol
+        if (Player.IsColliding_OilTrigger == true)
+        {
+            if (Inventory[this.index] != null)
+            {
+                int next = (this.index + 1) % Inventory.Length;
+                if (Inventory[this.index] != null)
+                {
+                    if (InventoryList[this.index] == ItemTypes.petrol)
+                    {
+                        ItemActions.PressEusePetrol.SetActive(true);
+                        if (Input.GetKeyDown(KeyCode.E))
+                        {
+                            // Was soll passieren hier hin
+                            ItemActions.Oil_Tank_Progressbar.GetComponent<Image>().enabled = true;
+                            ItemActions.StartCoroutine(ItemActions.Progressbar());
+                            //
+                            ItemActions.Index--;
+                            InventoryList[this.index] = ItemTypes.empty;
+                            Destroy(Inventory[this.index]);
+                            Inventory[this.index] = null;
+                            Moveselector(next);
+                            ItemActions.PressEusePetrol.SetActive(false);
+                        }
+                    }
+                }
+            }
+        }
+        else
+            ItemActions.PressEusePetrol.SetActive(false);
+        //Use Battery on Mobileradio;
+        if (Player.IsColliding_BaseTrigger && InventoryList.Contains(ItemTypes.battery) && InventoryList.Contains(ItemTypes.mobileradio))
+        {
+            if (Inventory[this.index] != null)
+            {
+                int next = (this.index + 1) % Inventory.Length;
+                if (Inventory[this.index] != null)
+                {
+                    ItemActions.PressErepairMobileradio.SetActive(true);
+                    if (Input.GetKeyDown(KeyCode.E))
+                    {
+                        //Was soll passieren hier rein
+
+                        //
+                        ItemActions.Index--;
+                        int indexBaterie = InventoryList.FindIndex(a => a == ItemTypes.battery);
+                        InventoryList[indexBaterie] = ItemTypes.empty;
+                        Destroy(Inventory[indexBaterie]);
+                        Inventory[indexBaterie] = null;
+                        Moveselector(next);
+                        ItemActions.PressErepairMobileradio.SetActive(false);
+                    }
+                }
+            }
+
+        }
+        else
+            ItemActions.PressErepairMobileradio.SetActive(false);
+        //Use Cable and Repairset on Radiotower
+        if (Player.IsColliding_RadioTrigger && InventoryList.Contains(ItemTypes.cable) && InventoryList.Contains(ItemTypes.repairset))
+        {
+            if (Inventory[this.index] != null)
+            {
+                int next = (this.index + 1) % Inventory.Length;
+                if (Inventory[this.index] != null)
+                {
+                    ItemActions.PressErepairRadiotower.SetActive(true);
+                    if (Input.GetKeyDown(KeyCode.E))
+                    {
+                        //Was soll passieren hier rein
+
+                        //
+                        ItemActions.Index -= 2;
+                        int indexCable = InventoryList.FindIndex(a => a == ItemTypes.cable);
+                        InventoryList[indexCable] = ItemTypes.empty;
+                        Destroy(Inventory[indexCable]);
+                        Inventory[indexCable] = null;
+                        int indexRepairset = InventoryList.FindIndex(a => a == ItemTypes.repairset);
+                        InventoryList[indexRepairset] = ItemTypes.empty;
+                        Destroy(Inventory[indexRepairset]);
+                        Inventory[indexRepairset] = null;
+                        Moveselector(next);
+                        ItemActions.PressErepairRadiotower.SetActive(false);
+                    }
+                }
+            }
+        }
+        else
+            ItemActions.PressErepairRadiotower.SetActive(false);
+        //Use Key
+        if (Player.IsColliding_Base_key_trigger == true)
+        {
+            if (Inventory[this.index] != null)
+            {
+                int next = (this.index + 1) % Inventory.Length;
+                if (Inventory[this.index] != null)
+                {
+                    if (InventoryList[this.index] == ItemTypes.key)
+                    {
+                        ItemActions.PressEuseKey.SetActive(true);
+                        if (Input.GetKeyDown(KeyCode.E))
+                        {
+                            // Was soll passieren hier hin
+                            Containerdoor.transform.Rotate(180, 90, 180);
+                            //Containerdoor.transform.RotateAround(new Vector3 (Containerdoor.transform.position.x, Containerdoor.transform.position.y, Containerdoor.transform.position.z),new Vector3(0,0,Containerdoor.transform.position.z), 90);
+                            //Containerdoor.transform.position = new Vector3(Containerdoor.transform..x + 90, Containerdoor.transform.position.y, Containerdoor.transform.position.z);
+                            //
+                            ItemActions.Index--;
+                            InventoryList[this.index] = ItemTypes.empty;
+                            Destroy(Inventory[this.index]);
+                            Inventory[this.index] = null;
+                            Moveselector(next);
+                            ItemActions.PressEuseKey.SetActive(false);
+                        }
+                    }
+                }
+            }
+        }
+        else
+            ItemActions.PressEuseKey.SetActive(false);
+
+    }
+
     void Start()
     {
         ItemActions = GetComponent<ItemActions>();
-        array = new GameObject[5];
+        Inventory = new GameObject[5];
     }
 
-    // Update is called once per frame
     void Update()
     {
         SelectItem();
