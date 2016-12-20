@@ -59,6 +59,10 @@ public class InventoryManager : MonoBehaviour
                     case ItemTypes.repairset:
                         break;
                     case ItemTypes.battery:
+                        GameObject temp6 = Instantiate(Resources.Load<GameObject>("battery_texture"));
+                        temp6.transform.position = Initial + Vector3.down * Delta * i;
+                        array[i] = temp6;
+                        temp6.transform.SetParent(ParentPanel.transform, false);
                         break;
                     default:
                         break;
@@ -124,6 +128,7 @@ public class InventoryManager : MonoBehaviour
                 int next = (this.index + 1) % array.Length;
                 if (array[this.index] != null)
                 {
+                    //Use Petrol
                     if (InventoryList[this.index] == ItemTypes.petrol)
                     {
                         ItemActions.PressEuse.SetActive(true);
@@ -132,7 +137,6 @@ public class InventoryManager : MonoBehaviour
                             // Was soll passieren hier hin
                             ItemActions.Oil_Tank_Progressbar.GetComponent<Image>().enabled = true;
                             ItemActions.StartCoroutine(ItemActions.Progressbar());
-                                
                             //
                             ItemActions.Index--;
                             InventoryList[this.index] = ItemTypes.empty;
@@ -145,6 +149,34 @@ public class InventoryManager : MonoBehaviour
                 }
             }
         }
+        else
+        //Use mobileradio and Baterie;
+        if (Player.IsColliding_BaseTrigger && InventoryList.Contains(ItemTypes.battery) && InventoryList.Contains(ItemTypes.mobileradio))
+        {
+            if (array[this.index] != null)
+            {
+                int next = (this.index + 1) % array.Length;
+                if (array[this.index] != null)
+                {
+                    ItemActions.PressErepair.SetActive(true);
+                    if (Input.GetKeyDown(KeyCode.E))
+                    {
+                        //Was soll passieren hier rein
+
+                        //
+                        ItemActions.Index--;
+                        int indexBaterie = InventoryList.FindIndex(a => a == ItemTypes.battery);
+                        InventoryList[indexBaterie] = ItemTypes.empty;
+                        Destroy(array[indexBaterie]);
+                        array[indexBaterie] = null;
+                        Moveselector(next);
+                        ItemActions.PressErepair.SetActive(false);
+                    }
+                }
+            }
+
+        }
+        
     }
 
     void Moveselector(int tslot)

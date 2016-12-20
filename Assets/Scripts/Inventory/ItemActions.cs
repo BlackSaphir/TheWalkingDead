@@ -8,6 +8,7 @@ public class ItemActions : MonoBehaviour
 {
     public GameObject PressEcollect;
     public GameObject PressEuse;
+    public GameObject PressErepair;
     public Image Oil_Tank_Progressbar;
     public GameObject InventoryFull;
     FirstPersonController Player;
@@ -100,6 +101,31 @@ public class ItemActions : MonoBehaviour
                     PressEcollect.SetActive(false);
                 }
             }
+            else
+            //Item Battery
+            if (Player.Item.tag == ("item_battery"))
+            {
+                PressEcollect.SetActive(true);
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+
+                    if (Index < 5)
+                    {
+                        Destroy(Player.Item);
+                        Manager.PickUp = ItemTypes.battery;
+
+                        Manager.UpdateList();
+                        Index++;
+                        Player.IsColliding = false;
+                    }
+                    else
+                    {
+                        StartCoroutine(InventoryFullMessage());
+                    }
+                    PressEcollect.SetActive(false);
+                }
+            }
+
         }
 
         else

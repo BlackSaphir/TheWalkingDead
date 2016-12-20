@@ -95,6 +95,13 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 IsColliding = true;
                 Item = Other.gameObject;
             }
+            // VOR DEM PUSCHEN ENTFERNEN
+            else
+            if (Other.gameObject.tag == ("item_battery"))
+            {
+                IsColliding = true;
+                Item = Other.gameObject;
+            }
 
         }
 
