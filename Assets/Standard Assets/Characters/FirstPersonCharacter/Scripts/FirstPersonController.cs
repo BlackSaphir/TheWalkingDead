@@ -69,7 +69,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
         public GameObject Item;
         public bool IsColliding_OilTrigger;
         public bool IsColliding_BaseTrigger;
-
+        public bool IsColliding_RadioTrigger;
+        public bool IsColliding_Base_key_trigger;
 
 
         public GameObject QuickEventText;
@@ -104,6 +105,16 @@ namespace UnityStandardAssets.Characters.FirstPerson
             {
                 IsColliding_BaseTrigger = true;
             }
+            else
+            if (Other.gameObject.tag == ("Base_key_trigger"))
+            {
+                IsColliding_Base_key_trigger = true;
+            }
+            else
+            if (Other.gameObject.tag == ("Radio_trigger"))
+            {
+                IsColliding_RadioTrigger = true;
+            }
             if (Other.gameObject.tag == ("item_mobileradio"))
             {
                 IsColliding = true;
@@ -115,6 +126,31 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 IsColliding = true;
                 Item = Other.gameObject;
             }
+            else
+            if (Other.gameObject.tag == ("item_battery"))
+            {
+                IsColliding = true;
+                Item = Other.gameObject;
+            }
+            else
+            if (Other.gameObject.tag == ("item_cable"))
+            {
+                IsColliding = true;
+                Item = Other.gameObject;
+            }
+            else
+            if (Other.gameObject.tag == ("item_repairset"))
+            {
+                IsColliding = true;
+                Item = Other.gameObject;
+            }
+            else
+            if (Other.gameObject.tag == ("item_key"))
+            {
+                IsColliding = true;
+                Item = Other.gameObject;
+            }
+
         }
 
         void OnTriggerExit(Collider Other)
@@ -122,6 +158,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
             IsColliding = false;
             IsColliding_OilTrigger = false;
             IsColliding_BaseTrigger = false;
+            IsColliding_RadioTrigger = false;
+            IsColliding_Base_key_trigger = false;
+
             Item = null;
         }
 
