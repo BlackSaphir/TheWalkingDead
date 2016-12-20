@@ -63,6 +63,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         public bool IsColliding;
         public GameObject Item;
         public bool IsColliding_OilTrigger;
+        public bool IsColliding_BaseTrigger;
         
         
 
@@ -77,6 +78,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
             if (Other.gameObject.tag == ("Oil_tank_trigger"))
             {
                 IsColliding_OilTrigger = true;
+            }
+            else
+            if (Other.gameObject.tag == ("Base_trigger"))
+            {
+                IsColliding_BaseTrigger = true;
             }
             if (Other.gameObject.tag == ("item_mobileradio"))
             {
@@ -96,6 +102,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         {
             IsColliding = false;
             IsColliding_OilTrigger = false;
+            IsColliding_BaseTrigger = false;
             Item = null;
         }
         
