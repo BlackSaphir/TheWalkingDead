@@ -1,22 +1,41 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityStandardAssets.Characters.FirstPerson;
 
 public class ItemActions : MonoBehaviour
 {
     public GameObject PressEcollect;
     public GameObject PressEuse;
+    public Image Oil_Tank_Progressbar;
     public GameObject InventoryFull;
     FirstPersonController Player;
     InventoryManager Manager;
     public int Index;
+    public int Amount = 0;
 
     IEnumerator InventoryFullMessage()
     {
         InventoryFull.SetActive(true);
         yield return new WaitForSeconds(3);
         InventoryFull.SetActive(false);
+    }
+
+
+    public IEnumerator Progressbar()
+    {
+        yield return new WaitForSeconds(1);
+        Amount++;
+        if (Amount < 180)
+        {
+            Oil_Tank_Progressbar.fillAmount -= 1.0f / 180.0f;
+            StartCoroutine(Progressbar());
+        }
+        else
+        {
+            StopAllCoroutines();
+        }
     }
 
     public void CollectItem()
@@ -92,15 +111,6 @@ public class ItemActions : MonoBehaviour
     }
 
 
-    public void UseItem()
-    {
-        if (Player.IsColliding_OilTrigger == true)
-        {
-            PressEuse.SetActive(true);
-        }
-    }
-
-    // Use this for initialization
     void Start()
     {
         Manager = GetComponent<InventoryManager>();

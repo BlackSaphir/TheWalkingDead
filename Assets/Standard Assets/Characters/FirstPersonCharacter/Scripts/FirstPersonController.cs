@@ -59,10 +59,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private float m_NextStep;
         private bool m_Jumping;
         private AudioSource m_AudioSource;
-        //Edit By Felix
+        
         public bool IsColliding;
         public GameObject Item;
         public bool IsColliding_OilTrigger;
+        public bool IsColliding_BaseTrigger;
         
         
 
@@ -77,6 +78,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
             if (Other.gameObject.tag == ("Oil_tank_trigger"))
             {
                 IsColliding_OilTrigger = true;
+            }
+            else
+            if (Other.gameObject.tag == ("Base_trigger"))
+            {
+                IsColliding_BaseTrigger = true;
             }
             if (Other.gameObject.tag == ("item_mobileradio"))
             {
@@ -95,10 +101,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
         void OnTriggerExit(Collider Other)
         {
             IsColliding = false;
+            IsColliding_OilTrigger = false;
+            IsColliding_BaseTrigger = false;
             Item = null;
         }
-
-        //End Edit By Felix
+        
 
         // Use this for initialization
         private void Start()
@@ -114,10 +121,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_Jumping = false;
             m_AudioSource = GetComponent<AudioSource>();
             m_MouseLook.Init(transform, m_Camera.transform);
-
-            //Edit by Felix
             IsColliding = false;
-            //End Edit by Felix
+          
             
         }
 
