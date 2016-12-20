@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DieInWater : MonoBehaviour
 {
-    void OnTriggerEnter (Collider collision)
+    void OnCollisionEnter (Collision collision)
     {
         if (collision.gameObject.tag == "WaterPlane")
         {

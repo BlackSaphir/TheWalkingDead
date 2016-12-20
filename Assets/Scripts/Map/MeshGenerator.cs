@@ -4,6 +4,8 @@ using UnityEngine;
 
 public static class MeshGenerator
 {
+    public static float MaxHeight = 0;
+
     public static MeshData GenerateTerrainMesh(float[,] heightMap, float heightMultiplier, AnimationCurve heightCurve)
     {
         int widht = heightMap.GetLength(0);
@@ -13,6 +15,8 @@ public static class MeshGenerator
 
         MeshData meshData = new MeshData(widht, height);
         int vertexIndex = 0;
+
+        MaxHeight = heightMultiplier;
 
         for (int y = 0; y < height; y++)
         {

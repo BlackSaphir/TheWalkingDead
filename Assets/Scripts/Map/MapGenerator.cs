@@ -3,59 +3,58 @@ using System.Collections;
 
 public class MapGenerator : MonoBehaviour
 {
-    public enum drawMode { noiseMap, colorMap, Mesh };
-    public drawMode DrawMode;
+    public enum DrawMode { NoiseMap, ColorMap, Mesh };
+    public DrawMode MyDrawMode;
     //const int mapChunkSize = 241;
     [Range(25, 60)]
-    public float noisescale;
+    public float Noisescale;
     [Range(1, 15)]
-    public int octaves;
-    [Range(0.0f, 0.2f)]
-    public float persistance;
+    public int Octaves;
+    [Range(0.1f, 0.3f)]
+    public float Persistance;
     [Range(1, 9)]
-    public float lacunarity;
+    public float Lacunarity;
     [Range(1, 150)]
-    public int seed;
-    [Range(140, 270)]
-    public float meshHeightMultiplier;
-    public Vector2 offset;
-    public TerrainType[] regions;
-    public AnimationCurve meshHeightCurve;
-    public Transform tree;
-    public bool autoUpdate;
+    public int Seed;
+    [Range(150, 320)]
+    public float MeshHeightMultiplier;
+    public TerrainType[] Regions;
+    public Vector2 Offset;
+    public AnimationCurve MeshHeightCurve;
+    public bool AutoUpdate;
 
-    public static int mapWidht = 180;
-    public static int mapHeight = 180;
+    public static int MapWidht = 180;
+    public static int MapHeight = 180;
+    public static float[,] NoiseMap;
 
-
-    void Start()
+    void Awake()
     {
 
-        noisescale = Random.Range(25, 60);
-        octaves = Random.Range(1, 15);
-        persistance = Random.Range(0.0f, 0.2f);
-        lacunarity = Random.Range(1, 9);
-        seed = Random.Range(1, 150);
-        meshHeightMultiplier = Random.Range(140, 270);
+        Noisescale = Random.Range(25, 60);
+        Octaves = Random.Range(1, 15);
+        Persistance = Random.Range(0.1f, 0.3f);
+        Lacunarity = Random.Range(1, 9);
+        Seed = Random.Range(1, 150);
+        MeshHeightMultiplier = Random.Range(150, 320);
         GenerateMap();
     }
 
     public void GenerateMap()
     {
-        float[,] noiseMap = Noise.GenerateNoiseMap(mapWidht, mapHeight, noisescale, octaves, persistance, lacunarity, seed, offset);
+        NoiseMap = Noise.GenerateNoiseMap(MapWidht, MapHeight, Noisescale, Octaves, Persistance, Lacunarity, Seed, Offset);
 
         // save all colors
-        Color[] colorMap = new Color[mapWidht * mapHeight];
-        for (int y = 0; y < mapHeight; y++)
+        Color[] colorMap = new Color[MapWidht * MapHeight];
+        for (int y = 0; y < MapHeight; y++)
         {
-            for (int x = 0; x < mapWidht; x++)
+            for (int x = 0; x < MapWidht; x++)
             {
-                float currentHeight = noiseMap[x, y];
-                for (int i = 0; i < regions.Length; i++)
+                float currentHeight = MeshHeightCurve.Evaluate(NoiseMap[x, y]);
+                for (int i = 0; i < Regions.Length; i++)
                 {
-                    if (currentHeight <= regions[i].height)
+                    if (currentHeight <= Regions[i].height)
                     {
-                        colorMap[y * mapWidht + x] = regions[i].color;
+                        colorMap[y * MapWidht + x] = Regions[i].color;
                         break;
                     }
                 }
@@ -63,60 +62,64 @@ public class MapGenerator : MonoBehaviour
         }
 
         MapDisplay display = FindObjectOfType<MapDisplay>();
-        if (DrawMode == drawMode.noiseMap)
+        if (MyDrawMode == DrawMode.NoiseMap)
         {
-            display.DrawTexture(TextureGenerator.TextureFromHeightMap(noiseMap));
+            display.DrawTexture(TextureGenerator.TextureFromHeightMap(NoiseMap));
         }
-        else if (DrawMode == drawMode.colorMap)
+        else if (MyDrawMode == DrawMode.ColorMap)
         {
-            display.DrawTexture(TextureGenerator.TextureFromColorMap(colorMap, mapWidht, mapHeight));
+            display.DrawTexture(TextureGenerator.TextureFromColorMap(colorMap, MapWidht, MapHeight));
 
         }
-        else if (DrawMode == drawMode.Mesh)
+        else if (MyDrawMode == DrawMode.Mesh)
         {
-            display.DrawMesh(MeshGenerator.GenerateTerrainMesh(noiseMap, meshHeightMultiplier, meshHeightCurve), TextureGenerator.TextureFromColorMap(colorMap, mapWidht, mapHeight));
-            display.DrawTexture(TextureGenerator.TextureFromColorMap(colorMap, mapWidht, mapHeight));
+            display.DrawMesh(MeshGenerator.GenerateTerrainMesh(NoiseMap, MeshHeightMultiplier, MeshHeightCurve), TextureGenerator.TextureFromColorMap(colorMap, MapWidht, MapHeight));
+            display.DrawTexture(TextureGenerator.TextureFromColorMap(colorMap, MapWidht, MapHeight));
         }
     }
 
     void OnValidate()
     {
-        if (mapWidht < 1)
+        if (MapWidht < 1)
         {
-            mapWidht = 1;
+            MapWidht = 1;
         }
 
-        if (mapHeight < 1)
+        if (MapHeight < 1)
         {
-            mapHeight = 1;
+            MapHeight = 1;
         }
 
-        if (octaves < 0)
+        if (Octaves < 0)
         {
-            octaves = 1;
+            Octaves = 1;
         }
 
-        if (lacunarity < 1)
+        if (Lacunarity < 1)
         {
-            lacunarity = 1;
+            Lacunarity = 1;
         }
     }
 
-
-
-
-    //public void PlaceTree()
-    //{
-    //    if (regions[].height == 0.45f)
-    //    {
-    //        for (int x = 0; x <; x++)
-    //        {
-
-    //        }
-    //        Instantiate(tree, new Vector3(), Quaternion.identity);
-    //    }
-
-    //}
+    /// <summary>
+    /// Indexer for TerrainTypes
+    /// </summary>
+    /// <param name="name">The name of the TerrainType.</param>
+    /// <returns></returns>
+    public TerrainType this[string name]
+    {
+        get
+        {
+            foreach (var type in Regions)
+            {
+                if (type.name == name)
+                {
+                    return type;
+                }
+            }
+            return default(TerrainType);
+        }
+    }
 }
 
 // Region Settings 
