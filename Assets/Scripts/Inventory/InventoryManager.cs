@@ -21,6 +21,9 @@ public class InventoryManager : MonoBehaviour
     private GameObject RecTemp;
     public List<ItemTypes> InventoryList;
     public int PanelIndex;
+    public bool RepairedRadiotower;
+    public bool RepairedMobileradio;
+    public bool EnoughPetrol;
 
     public void UpdateList()
     {
@@ -158,6 +161,7 @@ public class InventoryManager : MonoBehaviour
                         if (Input.GetKeyDown(KeyCode.E))
                         {
                             // Was soll passieren hier hin
+                            EnoughPetrol = true;
                             ItemActions.Oil_Tank_Progressbar.GetComponent<Image>().enabled = true;
                             ItemActions.StartCoroutine(ItemActions.Progressbar());
                             //
@@ -186,7 +190,7 @@ public class InventoryManager : MonoBehaviour
                     if (Input.GetKeyDown(KeyCode.E))
                     {
                         //Was soll passieren hier rein
-
+                        RepairedMobileradio = true;
                         //
                         ItemActions.Index--;
                         int indexBaterie = InventoryList.FindIndex(a => a == ItemTypes.battery);
@@ -214,7 +218,7 @@ public class InventoryManager : MonoBehaviour
                     if (Input.GetKeyDown(KeyCode.E))
                     {
                         //Was soll passieren hier rein
-
+                        RepairedRadiotower = true;
                         //
                         ItemActions.Index -= 2;
                         int indexCable = InventoryList.FindIndex(a => a == ItemTypes.cable);
@@ -248,9 +252,7 @@ public class InventoryManager : MonoBehaviour
                         {
                             // Was soll passieren hier hin
                             Containerdoor.transform.Rotate(180, 90, 180);
-                            //Containerdoor.transform.RotateAround(new Vector3 (Containerdoor.transform.position.x, Containerdoor.transform.position.y, Containerdoor.transform.position.z),new Vector3(0,0,Containerdoor.transform.position.z), 90);
-                            //Containerdoor.transform.position = new Vector3(Containerdoor.transform..x + 90, Containerdoor.transform.position.y, Containerdoor.transform.position.z);
-                            //
+
                             ItemActions.Index--;
                             InventoryList[this.index] = ItemTypes.empty;
                             Destroy(Inventory[this.index]);
@@ -269,6 +271,9 @@ public class InventoryManager : MonoBehaviour
 
     void Start()
     {
+        RepairedRadiotower = false;
+        RepairedMobileradio = false;
+        EnoughPetrol = false;
         ItemActions = GetComponent<ItemActions>();
         Inventory = new GameObject[5];
     }

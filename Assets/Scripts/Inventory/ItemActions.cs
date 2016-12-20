@@ -38,6 +38,7 @@ public class ItemActions : MonoBehaviour
         else
         {
             StopAllCoroutines();
+            Manager.EnoughPetrol = false;
         }
     }
 
