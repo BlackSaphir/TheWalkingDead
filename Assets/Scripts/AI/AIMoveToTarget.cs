@@ -22,13 +22,16 @@ public class AIMoveToTarget : StateMachineBehaviour
         {
             animator.SetBool("targetInRange", true);
         }
-        if (distance > 10.0f)
+        if (distance > 20.0f)
         {
             animator.SetBool("targetInSight", false);
         }
-        var targetrotation = Quaternion.LookRotation(Player.transform.position - animator.gameObject.transform.position, Vector3.up);
-        animator.gameObject.transform.rotation = Quaternion.Slerp(animator.gameObject.transform.rotation, targetrotation, Time.deltaTime * 2f);
-        animator.gameObject.transform.Translate(Vector3.forward * Time.deltaTime);
+        if (Player != null)
+        {
+            var targetrotation = Quaternion.LookRotation(Player.transform.position - animator.gameObject.transform.position, Vector3.up);
+            animator.gameObject.transform.rotation = Quaternion.Slerp(animator.gameObject.transform.rotation, targetrotation, Time.deltaTime * 2f);
+            animator.gameObject.transform.Translate(Vector3.forward * Time.deltaTime);
+        }
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state

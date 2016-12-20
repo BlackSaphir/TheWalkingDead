@@ -19,7 +19,7 @@ public class IdleScript : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         distance = AIObject.distance;
-        if (distance <= 10.0f)
+        if (distance <= 20.0f)
         {
             animator.SetBool("targetInSight", true);
         }
