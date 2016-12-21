@@ -1,8 +1,12 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Utility;
 using Random = UnityEngine.Random;
+using UnityEngine.UI;
+
 
 namespace UnityStandardAssets.Characters.FirstPerson
 {
@@ -59,13 +63,30 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private float m_NextStep;
         private bool m_Jumping;
         private AudioSource m_AudioSource;
-        
+
+        public GameObject QuickEventManager;
         public bool IsColliding;
         public GameObject Item;
         public bool IsColliding_OilTrigger;
         public bool IsColliding_BaseTrigger;
-        
-        
+        public bool IsColliding_RadioTrigger;
+        public bool IsColliding_Base_key_trigger;
+
+
+        public GameObject QuickEventText;
+        public float ForwardMovement;
+        public float SideMovement;
+        public bool CanMove;
+        public bool QuickEventDone;
+        public bool ItsTimeForQuicky;
+        public float DeathTimer;
+        public bool StartDeathTimer;
+        public KeyCode[] QuickEventButtons;
+        public bool RightButtonPressed;
+        public int Index;
+        public Text Text;
+
+
 
         void OnTriggerEnter(Collider Other)
         {
@@ -84,13 +105,47 @@ namespace UnityStandardAssets.Characters.FirstPerson
             {
                 IsColliding_BaseTrigger = true;
             }
+            else
+            if (Other.gameObject.tag == ("Base_key_trigger"))
+            {
+                IsColliding_Base_key_trigger = true;
+            }
+            else
+            if (Other.gameObject.tag == ("Radio_trigger"))
+            {
+                IsColliding_RadioTrigger = true;
+            }
             if (Other.gameObject.tag == ("item_mobileradio"))
             {
                 IsColliding = true;
                 Item = Other.gameObject;
             }
             else
-            if(Other.gameObject.tag == ("item_petrol"))
+            if (Other.gameObject.tag == ("item_petrol"))
+            {
+                IsColliding = true;
+                Item = Other.gameObject;
+            }
+            else
+            if (Other.gameObject.tag == ("item_battery"))
+            {
+                IsColliding = true;
+                Item = Other.gameObject;
+            }
+            else
+            if (Other.gameObject.tag == ("item_cable"))
+            {
+                IsColliding = true;
+                Item = Other.gameObject;
+            }
+            else
+            if (Other.gameObject.tag == ("item_repairset"))
+            {
+                IsColliding = true;
+                Item = Other.gameObject;
+            }
+            else
+            if (Other.gameObject.tag == ("item_key"))
             {
                 IsColliding = true;
                 Item = Other.gameObject;
@@ -103,14 +158,17 @@ namespace UnityStandardAssets.Characters.FirstPerson
             IsColliding = false;
             IsColliding_OilTrigger = false;
             IsColliding_BaseTrigger = false;
+            IsColliding_RadioTrigger = false;
+            IsColliding_Base_key_trigger = false;
+
             Item = null;
         }
-        
+
 
         // Use this for initialization
         private void Start()
         {
-            
+
             m_CharacterController = GetComponent<CharacterController>();
             m_Camera = Camera.main;
             m_OriginalCameraPosition = m_Camera.transform.localPosition;
@@ -122,14 +180,32 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_AudioSource = GetComponent<AudioSource>();
             m_MouseLook.Init(transform, m_Camera.transform);
             IsColliding = false;
-          
-            
+
+
+
+            CanMove = true;
+            DeathTimer = 0;
+            StartDeathTimer = false;
+            QuickEventDone = false;
+            RightButtonPressed = false;
+            QuickEventText.SetActive(false);
+
         }
 
 
         // Update is called once per frame
         private void Update()
         {
+            if (QuickEventDone)
+            {
+                CanMove = true;
+                DeathTimer = 0;
+                StartDeathTimer = false;
+                Index = 0;
+                if (Input.anyKeyDown)
+                    QuickEventText.SetActive(false);
+
+            }
             RotateView();
             // the jump state needs to read here to make sure it is not missed
             if (!m_Jump)
@@ -150,6 +226,47 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
 
             m_PreviouslyGrounded = m_CharacterController.isGrounded;
+
+
+
+
+
+            if (ItsTimeForQuicky)
+            {
+
+                if (Index < QuickEventButtons.Length)
+                {
+                    QuickEventText.SetActive(true);
+
+                    Text.text = "Press " + QuickEventButtons[Index].ToString() + " to free!";
+
+                    if (Input.anyKeyDown)
+                    {
+                        KeyCode Temp = QuickEventButtons[Index];
+                        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D))
+                        {
+                            //Ignore W,A,S,D bei Quick Event                    
+                        }
+                        else if (Input.GetKeyDown(Temp))
+                        {
+                            RightButtonPressed = true;
+                            Index++;
+                            Text.text = "Run Bitch Run";
+                        }
+                        else
+                            Destroy(this.gameObject);
+                    }
+                }
+                CanMove = false;
+            }
+            if (StartDeathTimer)
+            {
+                DeathTimer += Time.deltaTime;
+            }
+            if (DeathTimer > 5 && !QuickEventDone)
+            {
+                Destroy(this.gameObject);
+            }
         }
 
 
@@ -165,36 +282,41 @@ namespace UnityStandardAssets.Characters.FirstPerson
         {
             float speed;
             GetInput(out speed);
+
             // always move along the camera forward as it is the direction that it being aimed at
             Vector3 desiredMove = transform.forward * m_Input.y + transform.right * m_Input.x;
 
             // get a normal for the surface that is being touched to move along it
             RaycastHit hitInfo;
-            Physics.SphereCast(transform.position, m_CharacterController.radius, Vector3.down, out hitInfo,
-                               m_CharacterController.height / 2f, ~0, QueryTriggerInteraction.Ignore);
-            desiredMove = Vector3.ProjectOnPlane(desiredMove, hitInfo.normal).normalized;
-
-            m_MoveDir.x = desiredMove.x * speed;
-            m_MoveDir.z = desiredMove.z * speed;
-
-
-            if (m_CharacterController.isGrounded)
+            if (CanMove)
             {
-                m_MoveDir.y = -m_StickToGroundForce;
+                Physics.SphereCast(transform.position, m_CharacterController.radius, Vector3.down, out hitInfo,
+                                   m_CharacterController.height / 2f, ~0, QueryTriggerInteraction.Ignore);
+                desiredMove = Vector3.ProjectOnPlane(desiredMove, hitInfo.normal).normalized;
 
-                if (m_Jump)
+                m_MoveDir.x = desiredMove.x * speed;
+                m_MoveDir.z = desiredMove.z * speed;
+
+                if (m_CharacterController.isGrounded)
                 {
-                    m_MoveDir.y = m_JumpSpeed;
-                    PlayJumpSound();
-                    m_Jump = false;
-                    m_Jumping = true;
+                    m_MoveDir.y = -m_StickToGroundForce;
+
+                    if (m_Jump)
+                    {
+                        m_MoveDir.y = m_JumpSpeed;
+                        PlayJumpSound();
+                        m_Jump = false;
+                        m_Jumping = true;
+                    }
                 }
+                else
+                {
+                    m_MoveDir += Physics.gravity * m_GravityMultiplier * Time.fixedDeltaTime;
+                }
+                m_CollisionFlags = m_CharacterController.Move(m_MoveDir * Time.fixedDeltaTime);
             }
-            else
-            {
-                m_MoveDir += Physics.gravity * m_GravityMultiplier * Time.fixedDeltaTime;
-            }
-            m_CollisionFlags = m_CharacterController.Move(m_MoveDir * Time.fixedDeltaTime);
+
+
 
             ProgressStepCycle(speed);
             UpdateCameraPosition(speed);
@@ -285,7 +407,10 @@ namespace UnityStandardAssets.Characters.FirstPerson
 #endif
             // set the desired speed to be walking or running
             speed = m_IsWalking ? m_WalkSpeed : m_RunSpeed;
-            m_Input = new Vector2(horizontal, vertical);
+            if (CanMove)
+            {
+                m_Input = new Vector2(horizontal, vertical);
+            }
 
             // normalize input if it exceeds 1 in combined length:
             if (m_Input.sqrMagnitude > 1)
@@ -312,6 +437,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
             Rigidbody body = hit.collider.attachedRigidbody;
+
             //dont move the rigidbody if the character is on top of it
             if (m_CollisionFlags == CollisionFlags.Below)
             {
@@ -323,6 +449,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 return;
             }
             body.AddForceAtPosition(m_CharacterController.velocity * 0.1f, hit.point, ForceMode.Impulse);
+
         }
     }
 }

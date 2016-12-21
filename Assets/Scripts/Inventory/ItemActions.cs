@@ -7,7 +7,10 @@ using UnityStandardAssets.Characters.FirstPerson;
 public class ItemActions : MonoBehaviour
 {
     public GameObject PressEcollect;
-    public GameObject PressEuse;
+    public GameObject PressEusePetrol;
+    public GameObject PressErepairMobileradio;
+    public GameObject PressErepairRadiotower;
+    public GameObject PressEuseKey;
     public Image Oil_Tank_Progressbar;
     public GameObject InventoryFull;
     FirstPersonController Player;
@@ -88,6 +91,102 @@ public class ItemActions : MonoBehaviour
                     {
                         Destroy(Player.Item);
                         Manager.PickUp = ItemTypes.petrol;
+
+                        Manager.UpdateList();
+                        Index++;
+                        Player.IsColliding = false;
+                    }
+                    else
+                    {
+                        StartCoroutine(InventoryFullMessage());
+                    }
+                    PressEcollect.SetActive(false);
+                }
+            }
+            else
+            //Item Battery
+            if (Player.Item.tag == ("item_battery"))
+            {
+                PressEcollect.SetActive(true);
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+
+                    if (Index < 5)
+                    {
+                        Destroy(Player.Item);
+                        Manager.PickUp = ItemTypes.battery;
+
+                        Manager.UpdateList();
+                        Index++;
+                        Player.IsColliding = false;
+                    }
+                    else
+                    {
+                        StartCoroutine(InventoryFullMessage());
+                    }
+                    PressEcollect.SetActive(false);
+                }
+            }
+            else
+            // Item Cable
+            if (Player.Item.tag == ("item_cable"))
+            {
+                PressEcollect.SetActive(true);
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+
+                    if (Index < 5)
+                    {
+                        Destroy(Player.Item);
+                        Manager.PickUp = ItemTypes.cable;
+
+                        Manager.UpdateList();
+                        Index++;
+                        Player.IsColliding = false;
+                    }
+                    else
+                    {
+                        StartCoroutine(InventoryFullMessage());
+                    }
+                    PressEcollect.SetActive(false);
+                }
+            }
+            else
+            // Item Repairset
+             if (Player.Item.tag == ("item_repairset"))
+            {
+                PressEcollect.SetActive(true);
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+
+                    if (Index < 5)
+                    {
+                        Destroy(Player.Item);
+                        Manager.PickUp = ItemTypes.repairset;
+
+                        Manager.UpdateList();
+                        Index++;
+                        Player.IsColliding = false;
+                    }
+                    else
+                    {
+                        StartCoroutine(InventoryFullMessage());
+                    }
+                    PressEcollect.SetActive(false);
+                }
+            }
+            else
+            // Item Key
+             if (Player.Item.tag == ("item_key"))
+            {
+                PressEcollect.SetActive(true);
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+
+                    if (Index < 5)
+                    {
+                        Destroy(Player.Item);
+                        Manager.PickUp = ItemTypes.key;
 
                         Manager.UpdateList();
                         Index++;

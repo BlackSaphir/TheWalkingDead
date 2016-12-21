@@ -21,7 +21,10 @@ public class AIAgent : MonoBehaviour
     void Update()
     {
         timer += Time.deltaTime;
-        distance = Vector3.Distance(this.transform.position, Player.transform.position);
+        if (Player != null)
+        {
+            distance = Vector3.Distance(this.transform.position, Player.transform.position);
+        }
         if (timer >= 10)
         {
             SetTarget();
