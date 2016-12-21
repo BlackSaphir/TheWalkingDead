@@ -57,7 +57,7 @@ public class TreeSpawner : MonoBehaviour
                             {
                                 var tree = Instantiate(Tree, hit.point, Quaternion.identity);
                                 tree.Rotate(-90, 0, 0);
-                                tree.GetComponent<Renderer>().enabled = false;
+                                //tree.GetComponent<Renderer>().enabled = false;
                                 ++counter;
                             }
                         }
