@@ -7,14 +7,22 @@ public class AIAttack : StateMachineBehaviour
 {
     AIAgent AIObject;
     GameObject Player;
+    TriggerManager TriggerManager;
     FirstPersonController FirstPersonController;
     float distance;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        Player = animator.gameObject.GetComponent<AIAgent>().Player;
+        Player = animator.gameObject.GetComponent<AIAgent>().Player.gameObject;
         AIObject = animator.GetComponent<AIAgent>();
         FirstPersonController = Player.GetComponent<FirstPersonController>();
+        TriggerManager = Player.gameObject.GetComponent<TriggerManager>();
+
+        if (!TriggerManager.AttackingZombies.Contains(this))
+        {
+            TriggerManager.AttackingZombies.Add(this);
+        }
+
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -41,7 +49,7 @@ public class AIAttack : StateMachineBehaviour
             }
             else
                 FirstPersonController.QuickEventDone = false;
-            
+
         }
         if (Player == null)
         {
@@ -56,13 +64,16 @@ public class AIAttack : StateMachineBehaviour
     {
         if (Player != null)
         {
-            FirstPersonController.ItsTimeForQuicky = false;     
+            FirstPersonController.ItsTimeForQuicky = false;
             FirstPersonController.QuickEventText.SetActive(false);
             FirstPersonController.Index = 0;
             FirstPersonController.CanMove = true;
             FirstPersonController.QuickEventDone = true;
         }
         animator.SetBool("targetInRange", false);
+
+        TriggerManager.AttackingZombies.Remove(this);
+
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove(). Code that processes and affects root motion should be implemented here

@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.Characters.FirstPerson;
 
 public class AIAgent : MonoBehaviour
 {
     public float distance;
     public Vector3 target;
-    public GameObject Player;
+    public FirstPersonController Player;
     public float timer;
     public Vector3 offset;
     private float rotationtime;
@@ -15,6 +16,7 @@ public class AIAgent : MonoBehaviour
     void Start()
     {
         timer = 8;
+        Player = FindObjectOfType<FirstPersonController>();
     }
 
     // Update is called once per frame
@@ -48,5 +50,5 @@ public class AIAgent : MonoBehaviour
         target = new Vector3(Random.Range(this.transform.position.x - 10, this.transform.position.x + 10), this.transform.position.y, Random.Range(this.transform.position.z - 10, this.transform.position.z + 10));
 
         return target;
-    }
+    }      
 }
