@@ -5,9 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class DieInWater : MonoBehaviour
 {
-    void OnTriggerEnter(Collider collision)
+    void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Pipi");
+        Debug.Log("Sharks");
         if (collision.gameObject.tag == "WaterPlane")
         {
             Destroy(this.gameObject);

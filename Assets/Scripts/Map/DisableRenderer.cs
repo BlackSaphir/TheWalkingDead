@@ -7,13 +7,22 @@ public class DisableRenderer : MonoBehaviour
     Renderer renderer;
 
 
-    void Awake()
+    void Start()
     {
-        renderer = GetComponent<MeshRenderer>();
+        StartCoroutine(DisableMeshRenderer());
+        renderer = GetComponent<Renderer>();
+        
     }
 
 
-   void OnTriggerEnter(Collider collider)
+    IEnumerator DisableMeshRenderer()
+    {
+        this.GetComponent<Renderer>().enabled = false;
+        yield return new WaitForSeconds(4);
+    }
+
+
+    void OnTriggerEnter(Collider collider)
     {
         if (collider.gameObject.CompareTag("Player"))
         {
@@ -28,5 +37,6 @@ public class DisableRenderer : MonoBehaviour
             renderer.enabled = false;
         }
     }
+
 
 }
