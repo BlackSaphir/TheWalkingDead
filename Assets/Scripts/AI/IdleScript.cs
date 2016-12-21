@@ -11,6 +11,7 @@ public class IdleScript : StateMachineBehaviour
     {
 
         AIObject = animator.GetComponent<AIAgent>();
+        animator.SetBool("exit", false);
 
     }
 

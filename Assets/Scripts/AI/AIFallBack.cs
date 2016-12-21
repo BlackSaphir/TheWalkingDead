@@ -8,25 +8,40 @@ public class AIFallBack : StateMachineBehaviour
     AIAgent AIObject;
     GameObject Player;
     FirstPersonController FirstPersonController;
+    TriggerManager TriggerManager;
     float distance;
+    float timer;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        Player = animator.gameObject.GetComponent<AIAgent>().Player;
+        Player = animator.gameObject.GetComponent<AIAgent>().Player.gameObject;
         AIObject = animator.GetComponent<AIAgent>();
         FirstPersonController = Player.GetComponent<FirstPersonController>();
+        TriggerManager = Player.GetComponent<TriggerManager>();
+        timer = 0;
         animator.SetBool("targetInSight", false);
+      
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         distance = AIObject.distance;
-
-        if (distance < 20.0f)
+        timer += Time.deltaTime;
+        if (TriggerManager.AttackingZombies.Count == 0)
         {
-            animator.SetBool("targetInSight", true);
+            FirstPersonController.QuickEventText.SetActive(true);
+            FirstPersonController.Text.text = "Run Bitch Run!!!";
+        }
+        if (timer>=5f)
+        {
+            if (distance < 20.0f)
+            {
+                animator.SetBool("targetInSight", true);
+            }
+            else
+                animator.SetBool("exit",true);
         }
     }
 
@@ -34,6 +49,11 @@ public class AIFallBack : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.SetBool("PlayerFreed", false);
+
+        if (TriggerManager.AttackingZombies.Count == 0)
+        {
+            FirstPersonController.QuickEventText.SetActive(false);
+        }
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove(). Code that processes and affects root motion should be implemented here

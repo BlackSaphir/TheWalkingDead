@@ -85,7 +85,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         public bool RightButtonPressed;
         public int Index;
         public Text Text;
-
+        public bool TooManyZombies;
 
 
         void OnTriggerEnter(Collider Other)
@@ -189,6 +189,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
             QuickEventDone = false;
             RightButtonPressed = false;
             QuickEventText.SetActive(false);
+            TooManyZombies = false;
+            Index = 0;
 
         }
 
@@ -201,9 +203,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 CanMove = true;
                 DeathTimer = 0;
                 StartDeathTimer = false;
-                Index = 0;
-                if (Input.anyKeyDown)
+                //if (Input.anyKeyDown)
                     QuickEventText.SetActive(false);
+               
 
             }
             RotateView();
@@ -231,7 +233,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
 
 
-            if (ItsTimeForQuicky)
+            if (ItsTimeForQuicky && !TooManyZombies)
             {
 
                 if (Index < QuickEventButtons.Length)
@@ -251,7 +253,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
                         {
                             RightButtonPressed = true;
                             Index++;
-                            Text.text = "Run Bitch Run";
+                            //Text.text = "Run Bitch Run";
                         }
                         else
                             Destroy(this.gameObject);

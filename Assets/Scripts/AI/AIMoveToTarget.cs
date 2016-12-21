@@ -10,7 +10,7 @@ public class AIMoveToTarget : StateMachineBehaviour
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        Player = animator.gameObject.GetComponent<AIAgent>().Player;
+        Player = animator.gameObject.GetComponent<AIAgent>().Player.gameObject;
         AIObject = animator.GetComponent<AIAgent>();
     }
 
@@ -18,7 +18,7 @@ public class AIMoveToTarget : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         distance = AIObject.distance;
-        if (distance <= 3f)
+        if (distance <= 2f)
         {
             animator.SetBool("targetInRange", true);
         }
