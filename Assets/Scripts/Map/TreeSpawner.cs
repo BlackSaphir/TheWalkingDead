@@ -46,18 +46,14 @@ public class TreeSpawner : MonoBehaviour
                     Vector3 position = transform.position + new Vector3(x, StartHeight, z);
                     if (Physics.Raycast(position, Vector3.down, out hit, Distance, GroundLayer, QueryTriggerInteraction.Ignore))
                     {
-                        if (!Tree)
-                        {
-                            throw new System.Exception("there was no tree selected");
-                        }
+                       
 
-                        if (counter < 1000 && Random.Range(0, 16) == 0)
+                        if (counter < 3000 && Random.Range(0, 16) == 0)
                         {
                             if (hit.point.y >= MeshGenerator.MaxHeight * mapGenerator[StartRegion].height && hit.point.y <=  MeshGenerator.MaxHeight * mapGenerator[EndRegion].height)
                             {
                                 var tree = Instantiate(Tree, hit.point, Quaternion.identity);
                                 tree.Rotate(-90, 0, 0);
-                                //tree.GetComponent<Renderer>().enabled = false;
                                 ++counter;
                             }
                         }

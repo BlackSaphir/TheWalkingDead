@@ -10,7 +10,7 @@ public class MapGenerator : MonoBehaviour
     public float Noisescale;
     [Range(1, 15)]
     public int Octaves;
-    [Range(0.1f, 0.3f)]
+    [Range(0.1f, 0.23f)]
     public float Persistance;
     [Range(1, 9)]
     public float Lacunarity;
@@ -32,7 +32,7 @@ public class MapGenerator : MonoBehaviour
 
         Noisescale = Random.Range(25, 60);
         Octaves = Random.Range(1, 15);
-        Persistance = Random.Range(0.1f, 0.3f);
+        Persistance = Random.Range(0.1f, 0.23f);
         Lacunarity = Random.Range(1, 9);
         Seed = Random.Range(1, 150);
         MeshHeightMultiplier = Random.Range(150, 320);
