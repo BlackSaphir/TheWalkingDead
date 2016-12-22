@@ -7,6 +7,8 @@ public class ObjectiveSpawner : MonoBehaviour
 {
     public string StartRegionTree = "Forest";
     public string EndRegionTree = "Grass";
+    public string StartRegionZombies = "Forest";
+    public string EndRegionZombies = "Grass";
     public float Distance = 200.0f;
     public Transform Tree;
     public Transform Zombie;
@@ -21,7 +23,8 @@ public class ObjectiveSpawner : MonoBehaviour
 
     private bool placeObjects = true;
     private float[,] treeNoiseMap;
-    private int treecounter;
+    private int treeCounter;
+    private int zombieCounter;
 
     private MapGenerator mapGenerator;
 
@@ -30,7 +33,8 @@ public class ObjectiveSpawner : MonoBehaviour
         treeNoiseMap = new float[MapGenerator.MapWidht, MapGenerator.MapHeight];
         StartCoroutine(SpawningObjects());
 
-        treecounter = 0;
+        treeCounter = 0;
+        zombieCounter = 0;
 
         mapGenerator = FindObjectOfType<MapGenerator>();
     }
@@ -51,13 +55,23 @@ public class ObjectiveSpawner : MonoBehaviour
                     Vector3 position = transform.position + new Vector3(x, StartHeight, z);
                     if (Physics.Raycast(position, Vector3.down, out hit, Distance, GroundLayer, QueryTriggerInteraction.Ignore))
                     {
-                        if (treecounter < 3000 && Random.Range(0, 16) == 0)
+                        if (treeCounter < 3000 && Random.Range(0, 16) == 0)
                         {
-                            if (hit.point.y >= MeshGenerator.MaxHeight * mapGenerator[StartRegionTree].height && hit.point.y <=  MeshGenerator.MaxHeight * mapGenerator[EndRegionTree].height)
+                            if (hit.point.y >= MeshGenerator.MaxHeight * mapGenerator[StartRegionTree].height && hit.point.y <= MeshGenerator.MaxHeight * mapGenerator[EndRegionTree].height)
                             {
                                 var tree = Instantiate(Tree, hit.point, Quaternion.identity);
                                 tree.Rotate(-90, 0, 0);
-                                ++treecounter;
+                                ++treeCounter;
+                            }
+                        }
+
+                        else if (zombieCounter < 20 && Random.Range(0, 30) == 0)
+                        {
+                            if (hit.point.y >= MeshGenerator.MaxHeight * mapGenerator[StartRegionZombies].height && hit.point.y <= MeshGenerator.MaxHeight * mapGenerator[EndRegionZombies].height)
+                            {
+                                var zombie = Instantiate(Zombie, hit.point, Quaternion.identity);
+                                //zombie.Rotate(-90, 0, 0);
+                                ++zombieCounter;
                             }
                         }
                     }

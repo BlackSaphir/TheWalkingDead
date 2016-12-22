@@ -14,6 +14,7 @@ public class NavMeshSourceTag : MonoBehaviour
     // Global containers for all active mesh/terrain tags
     public static List<MeshFilter> m_Meshes = new List<MeshFilter>();
     public static List<Terrain> m_Terrains = new List<Terrain>();
+    
 
     void OnEnable()
     {
