@@ -21,6 +21,12 @@ public class InventoryManager : MonoBehaviour
     private GameObject RecTemp;
     public List<ItemTypes> InventoryList;
     public int PanelIndex;
+    public bool RepairedRadiotower;
+    public bool RepairedMobileradio;
+    public bool EnoughPetrol;
+    public bool CallForRescue;
+
+    public GameObject[] Torches;
 
     public void UpdateList()
     {
@@ -45,6 +51,10 @@ public class InventoryManager : MonoBehaviour
                         temp1.transform.SetParent(ParentPanel.transform, false);
                         break;
                     case ItemTypes.lightsources:
+                        GameObject temp2 = Instantiate(Resources.Load<GameObject>("lightsources_texture"));
+                        temp2.transform.position = Initial + Vector3.down * Delta * i;
+                        Inventory[i] = temp2;
+                        temp2.transform.SetParent(ParentPanel.transform, false);
                         break;
                     case ItemTypes.key:
                         GameObject temp3 = Instantiate(Resources.Load<GameObject>("key_texture"));
@@ -158,6 +168,7 @@ public class InventoryManager : MonoBehaviour
                         if (Input.GetKeyDown(KeyCode.E))
                         {
                             // Was soll passieren hier hin
+                            EnoughPetrol = true;
                             ItemActions.Oil_Tank_Progressbar.GetComponent<Image>().enabled = true;
                             ItemActions.StartCoroutine(ItemActions.Progressbar());
                             //
@@ -186,7 +197,7 @@ public class InventoryManager : MonoBehaviour
                     if (Input.GetKeyDown(KeyCode.E))
                     {
                         //Was soll passieren hier rein
-
+                        RepairedMobileradio = true;
                         //
                         ItemActions.Index--;
                         int indexBaterie = InventoryList.FindIndex(a => a == ItemTypes.battery);
@@ -214,7 +225,7 @@ public class InventoryManager : MonoBehaviour
                     if (Input.GetKeyDown(KeyCode.E))
                     {
                         //Was soll passieren hier rein
-
+                        RepairedRadiotower = true;
                         //
                         ItemActions.Index -= 2;
                         int indexCable = InventoryList.FindIndex(a => a == ItemTypes.cable);
@@ -248,9 +259,7 @@ public class InventoryManager : MonoBehaviour
                         {
                             // Was soll passieren hier hin
                             Containerdoor.transform.Rotate(180, 90, 180);
-                            //Containerdoor.transform.RotateAround(new Vector3 (Containerdoor.transform.position.x, Containerdoor.transform.position.y, Containerdoor.transform.position.z),new Vector3(0,0,Containerdoor.transform.position.z), 90);
-                            //Containerdoor.transform.position = new Vector3(Containerdoor.transform..x + 90, Containerdoor.transform.position.y, Containerdoor.transform.position.z);
-                            //
+
                             ItemActions.Index--;
                             InventoryList[this.index] = ItemTypes.empty;
                             Destroy(Inventory[this.index]);
@@ -264,11 +273,70 @@ public class InventoryManager : MonoBehaviour
         }
         else
             ItemActions.PressEuseKey.SetActive(false);
+        //Use repaired Mobileradio
+        if (Player.IsColliding_RadioTrigger && InventoryList.Contains(ItemTypes.mobileradio) && RepairedMobileradio && RepairedRadiotower && EnoughPetrol)
+        {
+            if (Inventory[this.index] != null)
+            {
+                int next = (this.index + 1) % Inventory.Length;
+                if (Inventory[this.index] != null)
+                {
+                    ItemActions.PressEuseMobileradio.SetActive(true);
+                    if (Input.GetKeyDown(KeyCode.E))
+                    {
+                        //Was soll passieren hier rein
+                        CallForRescue = true;
+                        //
+                        Moveselector(next);
+                        ItemActions.PressEuseMobileradio.SetActive(false);
+                    }
+                }
+            }
+        }
+        else
+            ItemActions.PressEuseMobileradio.SetActive(false);
+        //Use Lightsource
+        if (Player.IsColliding_RescuePlattform_Trigger && RepairedMobileradio && RepairedRadiotower && EnoughPetrol && CallForRescue)
+        {
+            if (Inventory[this.index] != null)
+            {
+                int next = (this.index + 1) % Inventory.Length;
+                if (Inventory[this.index] != null)
+                {
+                    if (InventoryList[this.index] == ItemTypes.lightsources)
+                    {
+
+                        ItemActions.PressEuseLightsource.SetActive(true);
+                        if (Input.GetKeyDown(KeyCode.E))
+                        {
+                            // Was soll passieren hier hin
+                            ItemActions.StartCoroutine(ItemActions.Winning());
+                            Torches = new GameObject[4];
+                            for (int i = 0; i < Torches.Length; i++)
+                            {
+                                Torches[i] = GameObject.Find("Torch"+i);
+                                Torches[i].GetComponent<Torchelight>().IntensityLight = 3;
+                            }
+                            //
+                            ItemActions.Index--;
+                            InventoryList[this.index] = ItemTypes.empty;
+                            Destroy(Inventory[this.index]);
+                            Inventory[this.index] = null;
+                            Moveselector(next);
+                            ItemActions.PressEuseLightsource.SetActive(false);
+                        }
+                    }
+                }
+            }
+        }
 
     }
 
     void Start()
     {
+        RepairedRadiotower = false;
+        RepairedMobileradio = false;
+        EnoughPetrol = false;
         ItemActions = GetComponent<ItemActions>();
         Inventory = new GameObject[5];
     }
