@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.Characters.FirstPerson;
 
 public class AIMoveToTarget : StateMachineBehaviour
 {
@@ -17,11 +18,20 @@ public class AIMoveToTarget : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        distance = AIObject.distance;
-        if (distance <= 2f)
+        Vector3 fwd = AIObject.transform.TransformDirection(Vector3.forward);
+        RaycastHit hit;
+        if (Physics.Raycast(AIObject.transform.position, fwd, out hit, 1.0f))
         {
-            animator.SetBool("targetInRange", true);
+            if (hit.collider.tag == "Player")
+            {
+                animator.SetBool("targetInRange", true);
+                Player.GetComponent<FirstPersonController>().CanMove = false;
+            }
+
         }
+
+        distance = AIObject.distance;
+        Debug.Log(distance);
         if (distance > 20.0f)
         {
             animator.SetBool("targetInSight", false);

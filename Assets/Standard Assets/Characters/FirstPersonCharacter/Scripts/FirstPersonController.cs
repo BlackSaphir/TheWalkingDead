@@ -71,6 +71,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         public bool IsColliding_BaseTrigger;
         public bool IsColliding_RadioTrigger;
         public bool IsColliding_Base_key_trigger;
+        public bool IsColliding_rescuePlattform_Trigger;
 
 
         public GameObject QuickEventText;
@@ -86,7 +87,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
         public int Index;
         public Text Text;
         public bool TooManyZombies;
-
 
         void OnTriggerEnter(Collider Other)
         {
@@ -114,6 +114,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
             if (Other.gameObject.tag == ("Radio_trigger"))
             {
                 IsColliding_RadioTrigger = true;
+            }
+            else
+            if (Other.gameObject.tag == ("RescuePlattform_trigger"))
+            {
+                IsColliding_rescuePlattform_Trigger = true;
             }
             if (Other.gameObject.tag == ("item_mobileradio"))
             {
@@ -150,6 +155,12 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 IsColliding = true;
                 Item = Other.gameObject;
             }
+            else
+            if (Other.gameObject.tag == ("item_lightsource"))
+            {
+                IsColliding = true;
+                Item = Other.gameObject;
+            }
 
         }
 
@@ -160,6 +171,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             IsColliding_BaseTrigger = false;
             IsColliding_RadioTrigger = false;
             IsColliding_Base_key_trigger = false;
+            IsColliding_rescuePlattform_Trigger = false;
 
             Item = null;
         }
@@ -197,15 +209,15 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
         // Update is called once per frame
         private void Update()
-        {
+        {           
             if (QuickEventDone)
             {
                 CanMove = true;
                 DeathTimer = 0;
                 StartDeathTimer = false;
                 //if (Input.anyKeyDown)
-                    QuickEventText.SetActive(false);
-               
+                QuickEventText.SetActive(false);
+
 
             }
             RotateView();
@@ -233,10 +245,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
 
 
-            if (ItsTimeForQuicky && !TooManyZombies)
+            if (ItsTimeForQuicky)
             {
-
-                if (Index < QuickEventButtons.Length)
+                if (Index < QuickEventButtons.Length && !TooManyZombies)
                 {
                     QuickEventText.SetActive(true);
 
@@ -256,10 +267,18 @@ namespace UnityStandardAssets.Characters.FirstPerson
                             //Text.text = "Run Bitch Run";
                         }
                         else
+                        {
                             Destroy(this.gameObject);
+                        }
                     }
                 }
+                else
+                {
+                    QuickEventText.SetActive(true);
+                    Text.text = "Oh shit! They got you!";
+                }
                 CanMove = false;
+
             }
             if (StartDeathTimer)
             {

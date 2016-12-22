@@ -10,9 +10,10 @@ public class AIAttack : StateMachineBehaviour
     TriggerManager TriggerManager;
     FirstPersonController FirstPersonController;
     float distance;
+    public int Index;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
+    {        
         Player = animator.gameObject.GetComponent<AIAgent>().Player.gameObject;
         AIObject = animator.GetComponent<AIAgent>();
         FirstPersonController = Player.GetComponent<FirstPersonController>();
@@ -28,11 +29,14 @@ public class AIAttack : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        Index = FindIndexOfThis();
         distance = AIObject.distance;
+
         if (distance > 3f)
         {
             animator.SetBool("targetInRange", false);
         }
+
         if (Player != null)
         {
             var targetrotation = Quaternion.LookRotation(Player.transform.position - animator.gameObject.transform.position, Vector3.up);
@@ -40,15 +44,18 @@ public class AIAttack : StateMachineBehaviour
 
             FirstPersonController.ItsTimeForQuicky = true;
             FirstPersonController.StartDeathTimer = true;
-            if (FirstPersonController.Index == FirstPersonController.QuickEventButtons.Length)
-            {
+
+
+            if (FirstPersonController.Index == FirstPersonController.QuickEventButtons.Length && Index == 0)
+            {                
                 FirstPersonController.QuickEventDone = true;
                 FirstPersonController.ItsTimeForQuicky = false;
                 animator.SetBool("PlayerFreed", true);
-                //FirstPersonController.Text.text = "Run Bitch Run";                          
             }
             else
-                FirstPersonController.QuickEventDone = false;
+            {
+                FirstPersonController.QuickEventDone = false;                
+            }
 
         }
         if (Player == null)
@@ -62,7 +69,7 @@ public class AIAttack : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (Player != null)
+        if (Player != null && Index == 0)
         {
             FirstPersonController.ItsTimeForQuicky = false;
             FirstPersonController.QuickEventText.SetActive(false);
@@ -76,6 +83,18 @@ public class AIAttack : StateMachineBehaviour
 
     }
 
+    private int FindIndexOfThis()
+    {
+        for (int i = 0; i < TriggerManager.AttackingZombies.Count; i++)
+        {
+            if (TriggerManager.AttackingZombies[i].Equals(this))
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     // OnStateMove is called right after Animator.OnAnimatorMove(). Code that processes and affects root motion should be implemented here
     //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
     //
@@ -85,4 +104,5 @@ public class AIAttack : StateMachineBehaviour
     //override public void OnStateIK(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
     //
     //}
+
 }

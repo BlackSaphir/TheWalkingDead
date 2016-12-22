@@ -301,7 +301,7 @@ public class InventoryManager : MonoBehaviour
         else
             ItemActions.PressEuseMobileradio.SetActive(false);
         //Use Lightsource
-        if (Player.IsColliding_RescuePlattform_Trigger && RepairedMobileradio && RepairedRadiotower && EnoughPetrol && CallForRescue)
+        if (Player.IsColliding_rescuePlattform_Trigger && RepairedMobileradio && RepairedRadiotower && EnoughPetrol && CallForRescue)
         {
             if (Inventory[this.index] != null)
             {
