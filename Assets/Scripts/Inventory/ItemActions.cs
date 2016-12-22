@@ -13,6 +13,13 @@ public class ItemActions : MonoBehaviour
     public GameObject PressEuseLightsource;
     public GameObject PressEuseKey;
     public GameObject PressEuseMobileradio;
+
+    public GameObject SoundRepairMobileradio;
+    public GameObject SoundUseMobileradio;
+    public GameObject SoundKey;
+    public GameObject SoundItem;
+
+
     public Image Oil_Tank_Progressbar;
     public GameObject InventoryFull;
     FirstPersonController Player;
@@ -75,6 +82,7 @@ public class ItemActions : MonoBehaviour
 
                     if (Index < 5)
                     {
+                        SoundItem.GetComponent<AudioSource>().Play();
                         Destroy(Player.Item);
                         Manager.PickUp = ItemTypes.mobileradio;
 
@@ -99,6 +107,7 @@ public class ItemActions : MonoBehaviour
 
                     if (Index < 5)
                     {
+                        SoundItem.GetComponent<AudioSource>().Play();
                         Destroy(Player.Item);
                         Manager.PickUp = ItemTypes.petrol;
 
@@ -123,6 +132,7 @@ public class ItemActions : MonoBehaviour
 
                     if (Index < 5)
                     {
+                        SoundItem.GetComponent<AudioSource>().Play();
                         Destroy(Player.Item);
                         Manager.PickUp = ItemTypes.battery;
 
@@ -147,6 +157,7 @@ public class ItemActions : MonoBehaviour
 
                     if (Index < 5)
                     {
+                        SoundItem.GetComponent<AudioSource>().Play();
                         Destroy(Player.Item);
                         Manager.PickUp = ItemTypes.cable;
 
@@ -171,6 +182,7 @@ public class ItemActions : MonoBehaviour
 
                     if (Index < 5)
                     {
+                        SoundItem.GetComponent<AudioSource>().Play();
                         Destroy(Player.Item);
                         Manager.PickUp = ItemTypes.lightsources;
 
@@ -194,6 +206,7 @@ public class ItemActions : MonoBehaviour
 
                     if (Index < 5)
                     {
+                        SoundItem.GetComponent<AudioSource>().Play();
                         Destroy(Player.Item);
                         Manager.PickUp = ItemTypes.repairset;
 
@@ -218,6 +231,7 @@ public class ItemActions : MonoBehaviour
 
                     if (Index < 5)
                     {
+                        SoundItem.GetComponent<AudioSource>().Play();
                         Destroy(Player.Item);
                         Manager.PickUp = ItemTypes.key;
 

@@ -198,6 +198,7 @@ public class InventoryManager : MonoBehaviour
                     {
                         //Was soll passieren hier rein
                         RepairedMobileradio = true;
+                        ItemActions.SoundRepairMobileradio.GetComponent<AudioSource>().Play();
                         //
                         ItemActions.Index--;
                         int indexBaterie = InventoryList.FindIndex(a => a == ItemTypes.battery);
@@ -224,6 +225,7 @@ public class InventoryManager : MonoBehaviour
                     ItemActions.PressErepairRadiotower.SetActive(true);
                     if (Input.GetKeyDown(KeyCode.E))
                     {
+                        
                         //Was soll passieren hier rein
                         RepairedRadiotower = true;
                         //
@@ -259,6 +261,7 @@ public class InventoryManager : MonoBehaviour
                         {
                             // Was soll passieren hier hin
                             Containerdoor.transform.Rotate(180, 90, 180);
+                            ItemActions.SoundKey.GetComponent<AudioSource>().Play();
 
                             ItemActions.Index--;
                             InventoryList[this.index] = ItemTypes.empty;
@@ -285,7 +288,9 @@ public class InventoryManager : MonoBehaviour
                     if (Input.GetKeyDown(KeyCode.E))
                     {
                         //Was soll passieren hier rein
+                        
                         CallForRescue = true;
+                        ItemActions.SoundUseMobileradio.GetComponent<AudioSource>().Play(3);
                         //
                         Moveselector(next);
                         ItemActions.PressEuseMobileradio.SetActive(false);
