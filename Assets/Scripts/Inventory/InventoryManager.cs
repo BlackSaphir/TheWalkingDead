@@ -24,6 +24,9 @@ public class InventoryManager : MonoBehaviour
     public bool RepairedRadiotower;
     public bool RepairedMobileradio;
     public bool EnoughPetrol;
+    public bool CallForRescue;
+
+    public GameObject[] Torches;
 
     public void UpdateList()
     {
@@ -48,6 +51,10 @@ public class InventoryManager : MonoBehaviour
                         temp1.transform.SetParent(ParentPanel.transform, false);
                         break;
                     case ItemTypes.lightsources:
+                        GameObject temp2 = Instantiate(Resources.Load<GameObject>("lightsources_texture"));
+                        temp2.transform.position = Initial + Vector3.down * Delta * i;
+                        Inventory[i] = temp2;
+                        temp2.transform.SetParent(ParentPanel.transform, false);
                         break;
                     case ItemTypes.key:
                         GameObject temp3 = Instantiate(Resources.Load<GameObject>("key_texture"));
@@ -266,6 +273,62 @@ public class InventoryManager : MonoBehaviour
         }
         else
             ItemActions.PressEuseKey.SetActive(false);
+        //Use repaired Mobileradio
+        if (Player.IsColliding_RadioTrigger && InventoryList.Contains(ItemTypes.mobileradio) && RepairedMobileradio && RepairedRadiotower && EnoughPetrol)
+        {
+            if (Inventory[this.index] != null)
+            {
+                int next = (this.index + 1) % Inventory.Length;
+                if (Inventory[this.index] != null)
+                {
+                    ItemActions.PressEuseMobileradio.SetActive(true);
+                    if (Input.GetKeyDown(KeyCode.E))
+                    {
+                        //Was soll passieren hier rein
+                        CallForRescue = true;
+                        //
+                        Moveselector(next);
+                        ItemActions.PressEuseMobileradio.SetActive(false);
+                    }
+                }
+            }
+        }
+        else
+            ItemActions.PressEuseMobileradio.SetActive(false);
+        //Use Lightsource
+        if (Player.IsColliding_RescuePlattform_Trigger && RepairedMobileradio && RepairedRadiotower && EnoughPetrol && CallForRescue)
+        {
+            if (Inventory[this.index] != null)
+            {
+                int next = (this.index + 1) % Inventory.Length;
+                if (Inventory[this.index] != null)
+                {
+                    if (InventoryList[this.index] == ItemTypes.lightsources)
+                    {
+
+                        ItemActions.PressEuseLightsource.SetActive(true);
+                        if (Input.GetKeyDown(KeyCode.E))
+                        {
+                            // Was soll passieren hier hin
+                            ItemActions.StartCoroutine(ItemActions.Winning());
+                            Torches = new GameObject[4];
+                            for (int i = 0; i < Torches.Length; i++)
+                            {
+                                Torches[i] = GameObject.Find("Torch"+i);
+                                Torches[i].GetComponent<Torchelight>().IntensityLight = 3;
+                            }
+                            //
+                            ItemActions.Index--;
+                            InventoryList[this.index] = ItemTypes.empty;
+                            Destroy(Inventory[this.index]);
+                            Inventory[this.index] = null;
+                            Moveselector(next);
+                            ItemActions.PressEuseLightsource.SetActive(false);
+                        }
+                    }
+                }
+            }
+        }
 
     }
 

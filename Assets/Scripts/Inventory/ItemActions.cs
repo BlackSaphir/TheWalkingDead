@@ -10,7 +10,9 @@ public class ItemActions : MonoBehaviour
     public GameObject PressEusePetrol;
     public GameObject PressErepairMobileradio;
     public GameObject PressErepairRadiotower;
+    public GameObject PressEuseLightsource;
     public GameObject PressEuseKey;
+    public GameObject PressEuseMobileradio;
     public Image Oil_Tank_Progressbar;
     public GameObject InventoryFull;
     FirstPersonController Player;
@@ -40,6 +42,13 @@ public class ItemActions : MonoBehaviour
             StopAllCoroutines();
             Manager.EnoughPetrol = false;
         }
+    }
+
+    public IEnumerator Winning()
+    {
+        yield return new WaitForSeconds(5);
+        Debug.Log("Winning");
+        //End Scene/Game
     }
 
     public void CollectItem()
@@ -153,8 +162,31 @@ public class ItemActions : MonoBehaviour
                 }
             }
             else
+            //Item Lightsource
+            if (Player.Item.tag == ("item_lightsource"))
+            {
+                PressEcollect.SetActive(true);
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+
+                    if (Index < 5)
+                    {
+                        Destroy(Player.Item);
+                        Manager.PickUp = ItemTypes.lightsources;
+
+                        Manager.UpdateList();
+                        Index++;
+                        Player.IsColliding = false;
+                    }
+                    else
+                    {
+                        StartCoroutine(InventoryFullMessage());
+                    }
+                    PressEcollect.SetActive(false);
+                }
+            }
             // Item Repairset
-             if (Player.Item.tag == ("item_repairset"))
+            if (Player.Item.tag == ("item_repairset"))
             {
                 PressEcollect.SetActive(true);
                 if (Input.GetKeyDown(KeyCode.E))
@@ -178,7 +210,7 @@ public class ItemActions : MonoBehaviour
             }
             else
             // Item Key
-             if (Player.Item.tag == ("item_key"))
+            if (Player.Item.tag == ("item_key"))
             {
                 PressEcollect.SetActive(true);
                 if (Input.GetKeyDown(KeyCode.E))
