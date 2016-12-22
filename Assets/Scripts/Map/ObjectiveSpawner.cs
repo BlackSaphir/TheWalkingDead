@@ -3,40 +3,45 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TreeSpawner : MonoBehaviour
+public class ObjectiveSpawner : MonoBehaviour
 {
-    public string StartRegion = "Forest";
-    public string EndRegion = "Grass";
+    public string StartRegionTree = "Forest";
+    public string EndRegionTree = "Grass";
     public float Distance = 200.0f;
     public Transform Tree;
+    public Transform Zombie;
+    public Transform Barrel;
+    public Transform SafeHouse;
+    public Transform RadioTower;
+    public Transform OilTank;
     public LayerMask GroundLayer;
     public float StartHeight = 205;
     public float MapScale = 10;
     public int TreeGap = 9;
 
-    private bool placeTrees = true;
+    private bool placeObjects = true;
     private float[,] treeNoiseMap;
-    private int counter;
+    private int treecounter;
 
     private MapGenerator mapGenerator;
 
     void Start()
     {
         treeNoiseMap = new float[MapGenerator.MapWidht, MapGenerator.MapHeight];
-        StartCoroutine(PlantTree());
+        StartCoroutine(SpawningObjects());
 
-        counter = 0;
+        treecounter = 0;
 
         mapGenerator = FindObjectOfType<MapGenerator>();
     }
 
 
-    IEnumerator PlantTree()
+    IEnumerator SpawningObjects()
     {
         treeNoiseMap = MapGenerator.NoiseMap;
         yield return new WaitForSeconds(3);
 
-        if (placeTrees)
+        if (placeObjects)
         {
             for (int x = 0; x < MapGenerator.MapWidht * MapScale; x += TreeGap)
             {
@@ -46,15 +51,13 @@ public class TreeSpawner : MonoBehaviour
                     Vector3 position = transform.position + new Vector3(x, StartHeight, z);
                     if (Physics.Raycast(position, Vector3.down, out hit, Distance, GroundLayer, QueryTriggerInteraction.Ignore))
                     {
-                       
-
-                        if (counter < 3000 && Random.Range(0, 16) == 0)
+                        if (treecounter < 3000 && Random.Range(0, 16) == 0)
                         {
-                            if (hit.point.y >= MeshGenerator.MaxHeight * mapGenerator[StartRegion].height && hit.point.y <=  MeshGenerator.MaxHeight * mapGenerator[EndRegion].height)
+                            if (hit.point.y >= MeshGenerator.MaxHeight * mapGenerator[StartRegionTree].height && hit.point.y <=  MeshGenerator.MaxHeight * mapGenerator[EndRegionTree].height)
                             {
                                 var tree = Instantiate(Tree, hit.point, Quaternion.identity);
                                 tree.Rotate(-90, 0, 0);
-                                ++counter;
+                                ++treecounter;
                             }
                         }
                     }
