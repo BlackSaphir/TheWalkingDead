@@ -15,6 +15,9 @@ public class NavMeshSourceTag : MonoBehaviour
     public static List<MeshFilter> m_Meshes = new List<MeshFilter>();
     public static List<Terrain> m_Terrains = new List<Terrain>();
 
+
+
+   
     void OnEnable()
     {
         var m = GetComponent<MeshFilter>();
@@ -60,7 +63,7 @@ public class NavMeshSourceTag : MonoBehaviour
 
             var s = new NavMeshBuildSource();
             s.shape = NavMeshBuildSourceShape.Mesh;
-            s.sourceObject = m; 
+            s.sourceObject = m;
             s.transform = mf.transform.localToWorldMatrix;
             s.area = 0;
             sources.Add(s);

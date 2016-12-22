@@ -11,7 +11,7 @@ public class NavMeshCreator : MonoBehaviour
     public Transform m_Tracked;
 
     // The size of the build bounds
-    public Vector3 m_Size = new Vector3(1100.0f, 500.0f, 1100.0f);
+    public Vector3 m_Size = new Vector3(1800, 20, 1800);
 
     NavMeshData navMesh;
     AsyncOperation operation;
@@ -19,11 +19,12 @@ public class NavMeshCreator : MonoBehaviour
     List<NavMeshBuildSource> sources = new List<NavMeshBuildSource>();
 
 
-    IEnumerator Start()
+    IEnumerator StartCreating()
     {
         while (true)
         {
             UpdateNavMesh(true);
+
             yield return operation;
         }
     }
@@ -73,9 +74,9 @@ public class NavMeshCreator : MonoBehaviour
 
     Bounds QuantizedBounds()
     {
-        // Quantize the bounds to update only when theres a 10% change in size
+        // Quantize the bounds to update only when theres a 1% change in size
         var center = m_Tracked ? m_Tracked.position : transform.position;
-        return new Bounds(Quantize(center, 0.1f * m_Size), m_Size);
+        return new Bounds(Quantize(center, 0.01f * m_Size), m_Size);
     }
 
     void OnDrawGizmosSelected()
