@@ -31,7 +31,8 @@ public class ObjectiveSpawner : MonoBehaviour
     void Start()
     {
         treeNoiseMap = new float[MapGenerator.MapWidht, MapGenerator.MapHeight];
-        StartCoroutine(SpawningObjects());
+        StartCoroutine(SpawnTree());
+        StartCoroutine(SpawnZombies());
 
         treeCounter = 0;
         zombieCounter = 0;
@@ -40,10 +41,10 @@ public class ObjectiveSpawner : MonoBehaviour
     }
 
 
-    IEnumerator SpawningObjects()
+    IEnumerator SpawnTree()
     {
         treeNoiseMap = MapGenerator.NoiseMap;
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(1);
 
         if (placeObjects)
         {
@@ -55,7 +56,7 @@ public class ObjectiveSpawner : MonoBehaviour
                     Vector3 position = transform.position + new Vector3(x, StartHeight, z);
                     if (Physics.Raycast(position, Vector3.down, out hit, Distance, GroundLayer, QueryTriggerInteraction.Ignore))
                     {
-                        if (treeCounter < 3000 && Random.Range(0, 16) == 0)
+                        if (treeCounter < 2800 && Random.Range(0, 16) == 0)
                         {
                             if (hit.point.y >= MeshGenerator.MaxHeight * mapGenerator[StartRegionTree].height && hit.point.y <= MeshGenerator.MaxHeight * mapGenerator[EndRegionTree].height)
                             {
@@ -64,13 +65,32 @@ public class ObjectiveSpawner : MonoBehaviour
                                 ++treeCounter;
                             }
                         }
+                    }
+                }
+            }
+        }
+    }
 
-                        else if (zombieCounter < 20 && Random.Range(0, 30) == 0)
+
+    IEnumerator SpawnZombies()
+    {
+        treeNoiseMap = MapGenerator.NoiseMap;
+        yield return new WaitForSeconds(2);
+        if (placeObjects)
+        {
+            for (int x = 0; x < MapGenerator.MapWidht * MapScale; x += TreeGap)
+            {
+                for (int z = 0; z < MapGenerator.MapHeight * MapScale; z += TreeGap)
+                {
+                    RaycastHit hit;
+                    Vector3 position = transform.position + new Vector3(x, StartHeight, z);
+                    if (Physics.Raycast(position, Vector3.down, out hit, Distance, GroundLayer, QueryTriggerInteraction.Ignore))
+                    {
+                        if (zombieCounter < 20 && Random.Range(0, 30) == 0)
                         {
                             if (hit.point.y >= MeshGenerator.MaxHeight * mapGenerator[StartRegionZombies].height && hit.point.y <= MeshGenerator.MaxHeight * mapGenerator[EndRegionZombies].height)
                             {
                                 var zombie = Instantiate(Zombie, hit.point, Quaternion.identity);
-                                //zombie.Rotate(-90, 0, 0);
                                 ++zombieCounter;
                             }
                         }
@@ -78,7 +98,7 @@ public class ObjectiveSpawner : MonoBehaviour
                 }
             }
         }
-
     }
 }
+
 

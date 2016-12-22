@@ -8,7 +8,7 @@ public class DieInWater : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         Debug.Log("Sharks");
-        if (collision.gameObject.tag == "WaterPlane")
+        if (collision.gameObject.CompareTag("WaterPlane"))
         {
             Destroy(this.gameObject);
             SceneManager.LoadScene("LooseScene");
