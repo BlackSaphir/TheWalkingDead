@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityStandardAssets.Characters.FirstPerson;
 
@@ -54,7 +55,7 @@ public class ItemActions : MonoBehaviour
     public IEnumerator Winning()
     {
         yield return new WaitForSeconds(5);
-        Debug.Log("Winning");
+        SceneManager.LoadScene("WinScene");
         //End Scene/Game
     }
 

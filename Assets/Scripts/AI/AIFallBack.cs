@@ -8,7 +8,7 @@ public class AIFallBack : StateMachineBehaviour
     AIAgent AIObject;
     GameObject Player;
     FirstPersonController FirstPersonController;
-    TriggerManager TriggerManager;
+    PlayerManager PlayerManager;
     float distance;
     float timer;
 
@@ -18,7 +18,7 @@ public class AIFallBack : StateMachineBehaviour
         Player = animator.gameObject.GetComponent<AIAgent>().Player.gameObject;
         AIObject = animator.GetComponent<AIAgent>();
         FirstPersonController = Player.GetComponent<FirstPersonController>();
-        TriggerManager = Player.GetComponent<TriggerManager>();
+        PlayerManager = Player.GetComponent<PlayerManager>();
         timer = 0;
         animator.SetBool("targetInSight", false);
       
@@ -29,7 +29,7 @@ public class AIFallBack : StateMachineBehaviour
     {
         distance = AIObject.distance;
         timer += Time.deltaTime;
-        if (TriggerManager.AttackingZombies.Count == 0)
+        if (PlayerManager.AttackingZombies.Count == 0)
         {
             FirstPersonController.QuickEventText.SetActive(true);
             FirstPersonController.Text.text = "Run Bitch Run!!!";
@@ -50,7 +50,7 @@ public class AIFallBack : StateMachineBehaviour
     {
         animator.SetBool("PlayerFreed", false);
 
-        if (TriggerManager.AttackingZombies.Count == 0)
+        if (PlayerManager.AttackingZombies.Count == 0)
         {
             FirstPersonController.QuickEventText.SetActive(false);
         }

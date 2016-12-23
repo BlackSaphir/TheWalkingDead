@@ -7,22 +7,23 @@ public class AIAttack : StateMachineBehaviour
 {
     AIAgent AIObject;
     GameObject Player;
-    TriggerManager TriggerManager;
+    PlayerManager PlayerManager;
     FirstPersonController FirstPersonController;
+    public int Index;    
     float distance;
-    public int Index;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {        
+    {
         Player = animator.gameObject.GetComponent<AIAgent>().Player.gameObject;
         AIObject = animator.GetComponent<AIAgent>();
         FirstPersonController = Player.GetComponent<FirstPersonController>();
-        TriggerManager = Player.gameObject.GetComponent<TriggerManager>();
+        PlayerManager = Player.gameObject.GetComponent<PlayerManager>();
 
-        if (!TriggerManager.AttackingZombies.Contains(this))
+        if (!PlayerManager.AttackingZombies.Contains(this))
         {
-            TriggerManager.AttackingZombies.Add(this);
+            PlayerManager.AttackingZombies.Add(this);
         }
+        FirstPersonController.AttackAnimation = false;
 
     }
 
@@ -48,6 +49,7 @@ public class AIAttack : StateMachineBehaviour
 
             if (FirstPersonController.Index == FirstPersonController.QuickEventButtons.Length && Index == 0)
             {                
+                FirstPersonController.AttackAnimation = true;
                 FirstPersonController.QuickEventDone = true;
                 FirstPersonController.ItsTimeForQuicky = false;
                 animator.SetBool("PlayerFreed", true);
@@ -79,15 +81,15 @@ public class AIAttack : StateMachineBehaviour
         }
         animator.SetBool("targetInRange", false);
 
-        TriggerManager.AttackingZombies.Remove(this);
+        PlayerManager.AttackingZombies.Remove(this);
 
     }
 
     private int FindIndexOfThis()
     {
-        for (int i = 0; i < TriggerManager.AttackingZombies.Count; i++)
+        for (int i = 0; i < PlayerManager.AttackingZombies.Count; i++)
         {
-            if (TriggerManager.AttackingZombies[i].Equals(this))
+            if (PlayerManager.AttackingZombies[i].Equals(this))
             {
                 return i;
             }

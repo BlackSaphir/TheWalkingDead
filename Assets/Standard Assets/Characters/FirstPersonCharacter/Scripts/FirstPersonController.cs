@@ -87,6 +87,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         public int Index;
         public Text Text;
         public bool TooManyZombies;
+        public bool AttackAnimation;
 
         void OnTriggerEnter(Collider Other)
         {
@@ -172,7 +173,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
             IsColliding_RadioTrigger = false;
             IsColliding_Base_key_trigger = false;
             IsColliding_rescuePlattform_Trigger = false;
-
             Item = null;
         }
 
@@ -180,7 +180,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
         // Use this for initialization
         private void Start()
         {
-
             m_CharacterController = GetComponent<CharacterController>();
             m_Camera = Camera.main;
             m_OriginalCameraPosition = m_Camera.transform.localPosition;
@@ -193,8 +192,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_MouseLook.Init(transform, m_Camera.transform);
             IsColliding = false;
 
-
-
             CanMove = true;
             DeathTimer = 0;
             StartDeathTimer = false;
@@ -203,7 +200,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
             QuickEventText.SetActive(false);
             TooManyZombies = false;
             Index = 0;
-
         }
 
 
@@ -215,7 +211,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 CanMove = true;
                 DeathTimer = 0;
                 StartDeathTimer = false;
-                //if (Input.anyKeyDown)
                 QuickEventText.SetActive(false);
 
 
@@ -317,6 +312,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
                 m_MoveDir.x = desiredMove.x * speed;
                 m_MoveDir.z = desiredMove.z * speed;
+
+
 
                 if (m_CharacterController.isGrounded)
                 {
