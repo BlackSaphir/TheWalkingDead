@@ -5,17 +5,20 @@ using UnityEngine.UI;
 
 public class ObjectiveSpawner : MonoBehaviour
 {
-    public string StartRegionTree = "Beach";
+    public string StartRegionTree = "Beach2";
     public string EndRegionTree = "Grass";
     public string StartRegionZombies = "Forest";
     public string EndRegionZombies = "Grass";
     public string StartRegionPlayer = "Dark Rock";
+    public string StartRegionRescuePlatform = "Beach";
+    public string EndRegionRescuePlatform = "Snow";
     public float Distance = 200.0f;
     public Transform Player;
     public Transform Tree;
     public Transform Zombie;
     public Transform Barrel;
     public Transform Torch;
+    public Transform RescuePlatform;
     public LayerMask GroundLayer;
     public float StartHeight = 205;
     public float MapScale = 10;
@@ -25,9 +28,11 @@ public class ObjectiveSpawner : MonoBehaviour
     private bool b_placeTrees = true;
     private bool b_placePlayer = true;
     private bool b_placeZombies = true;
+    private bool b_placeRescuePlatform = true;
     private int treeCounter;
     private int zombieCounter;
     private int playerCounter;
+    private int rescuePlatformCounter;
     private float[,] treeNoiseMap;
 
     private MapGenerator mapGenerator;
@@ -38,10 +43,12 @@ public class ObjectiveSpawner : MonoBehaviour
         //StartCoroutine(SpawnPlayer());
         StartCoroutine(SpawnTree());
         StartCoroutine(SpawnZombies());
+        StartCoroutine(SpawnRescuePlatform());
 
         treeCounter = 0;
         zombieCounter = 0;
         playerCounter = 0;
+        rescuePlatformCounter = 0;
 
     }
 
@@ -137,6 +144,35 @@ public class ObjectiveSpawner : MonoBehaviour
                             {
                                 var zombie = Instantiate(Zombie, hit.point, Quaternion.identity);
                                 ++zombieCounter;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    //spawn RescuePlatform
+    IEnumerator SpawnRescuePlatform()
+    {
+        yield return new WaitForSeconds(11);
+
+        if (b_placeRescuePlatform)
+        {
+            for (int x = 0; x < MapGenerator.MapWidht * MapScale; ++x)
+            {
+                for (int z = 0; z < MapGenerator.MapHeight * MapScale; ++z)
+                {
+                    RaycastHit hit;
+                    Vector3 position = transform.position + new Vector3(x, StartHeight, z);
+                    if (Physics.Raycast(position, Vector3.down, out hit, Distance, GroundLayer, QueryTriggerInteraction.Ignore))
+                    {
+                        if (rescuePlatformCounter < 1)
+                        {
+                            if (hit.point.y <= MeshGenerator.MaxHeight * mapGenerator[StartRegionRescuePlatform].height)
+                            {
+                                var rescuePlatform = Instantiate(RescuePlatform, hit.point, Quaternion.identity);
+                                ++rescuePlatformCounter;
                             }
                         }
                     }

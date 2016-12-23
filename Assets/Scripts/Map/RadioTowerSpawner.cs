@@ -5,18 +5,19 @@ using UnityEngine.UI;
 
 public class RadioTowerSpawner : MonoBehaviour
 {
-    //public string StartRegionRadioTower = "Snow";
+    public string StartRegionBase = "Beach";
     public float Distance = 500.0f;
     public Transform RadioTower;
     public Transform Base;
-    public Transform RescuePlatform;
     public LayerMask GroundLayer;
     public float StartHeight = 305;
     public float MapScale = 10;
 
     private bool b_spawnRadioTower = true;
+    private bool b_spawnBase = true;
     //private float[,] treeNoiseMap;
     private int radioTowerCounter;
+    private int baseCounter;
 
     private MapGenerator mapGenerator;
 
@@ -24,6 +25,7 @@ public class RadioTowerSpawner : MonoBehaviour
     {
         //treeNoiseMap = new float[MapGenerator.MapWidht, MapGenerator.MapHeight];
         StartCoroutine(SpawnRadioTower());
+        StartCoroutine(SpawnBase());
 
         radioTowerCounter = 0;
 
@@ -46,11 +48,41 @@ public class RadioTowerSpawner : MonoBehaviour
                     {
                         if (radioTowerCounter < 1)
                         {
-                            if (hit.point.y == MeshGenerator.MaxHeight /** mapGenerator[StartRegionRadioTower].height*/)
+                            if (hit.point.y == MeshGenerator.MaxHeight) 
                             {
                                 var radioTower = Instantiate(RadioTower, hit.point, Quaternion.identity);
                                 radioTower.Rotate(-90, 0, 0);
                                 ++radioTowerCounter;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    IEnumerator SpawnBase()
+    {
+        mapGenerator = FindObjectOfType<MapGenerator>();
+        yield return new WaitForSeconds(8);
+        if (b_spawnBase)
+        {
+            for (int z = 0; Mathf.Abs(z) < MapGenerator.MapWidht * MapScale; z--)
+            {
+                for (int x = 0; x < MapGenerator.MapHeight * MapScale; ++x)
+                {
+                    RaycastHit hit;
+                    Vector3 position = transform.position + new Vector3(x, StartHeight, z);
+                    if (Physics.Raycast(position, Vector3.down, out hit, Distance, GroundLayer, QueryTriggerInteraction.Ignore))
+                    {
+                        if (baseCounter < 1)
+                        {
+                            if (hit.point.y <= MeshGenerator.MaxHeight * mapGenerator[StartRegionBase].height /*&& hit.point.y <= MeshGenerator.MaxHeight * mapGenerator[EndRegionBase].height*/ )
+                            {
+                                var playerBase  = Instantiate(Base, hit.point, Quaternion.identity);                                
+                                ++baseCounter;
                             }
                         }
                     }
