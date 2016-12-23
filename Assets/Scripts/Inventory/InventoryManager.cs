@@ -344,12 +344,16 @@ public class InventoryManager : MonoBehaviour
         EnoughPetrol = false;
         ItemActions = GetComponent<ItemActions>();
         Inventory = new GameObject[5];
+        InventoryList[0] = ItemTypes.empty;
+        InventoryList[1] = ItemTypes.empty;
+        InventoryList[2] = ItemTypes.empty;
+
     }
 
     void Update()
     {
         SelectItem();
         DropItem(index);
-        UseItem(index);
+        UseItem(index);       
     }
 }
