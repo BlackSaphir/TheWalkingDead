@@ -5,7 +5,6 @@ public class MapGenerator : MonoBehaviour
 {
     public enum DrawMode { NoiseMap, ColorMap, Mesh };
     public DrawMode MyDrawMode;
-    //const int mapChunkSize = 241;
     [Range(25, 60)]
     public float Noisescale;
     [Range(1, 15)]
@@ -23,8 +22,8 @@ public class MapGenerator : MonoBehaviour
     public AnimationCurve MeshHeightCurve;
     public bool AutoUpdate;
 
-    public static int MapWidht = 180;
-    public static int MapHeight = 180;
+    public static int MapWidht = 140;
+    public static int MapHeight = 140;
     public static float[,] NoiseMap;
 
     void Awake()

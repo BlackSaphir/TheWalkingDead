@@ -11,7 +11,7 @@ public class NavMeshCreator : MonoBehaviour
     public Transform m_Tracked;
 
     // The size of the build bounds
-    public Vector3 m_Size = new Vector3(1800, 20, 1800);
+    public Vector3 m_Size = new Vector3(100, 10, 100);
 
     NavMeshData navMesh;
     AsyncOperation operation;
