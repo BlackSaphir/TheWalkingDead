@@ -17,7 +17,6 @@ public class ObjectiveSpawner : MonoBehaviour
     public Transform Tree;
     public Transform Zombie;
     public Transform Barrel;
-    public Transform Torch;
     public Transform RescuePlatform;
     public LayerMask GroundLayer;
     public float StartHeight = 205;
@@ -40,7 +39,7 @@ public class ObjectiveSpawner : MonoBehaviour
     void Awake()
     {
         treeNoiseMap = new float[MapGenerator.MapWidht, MapGenerator.MapHeight];
-        //StartCoroutine(SpawnPlayer());
+        StartCoroutine(SpawnPlayer());
         StartCoroutine(SpawnTree());
         StartCoroutine(SpawnZombies());
         StartCoroutine(SpawnRescuePlatform());
@@ -58,6 +57,36 @@ public class ObjectiveSpawner : MonoBehaviour
 
         treeNoiseMap = MapGenerator.NoiseMap;
 
+        ////spawn Player
+        //if (b_placePlayer)
+        //{
+        //    for (int x = 0; x < MapGenerator.MapWidht * MapScale; ++x)
+        //    {
+        //        for (int z = 0; z < MapGenerator.MapHeight * MapScale; ++z)
+        //        {
+        //            RaycastHit hit;
+        //            Vector3 position = transform.position + new Vector3(x, StartHeight, z);
+        //            if (Physics.Raycast(position, Vector3.down, out hit, Distance, GroundLayer, QueryTriggerInteraction.Ignore))
+        //            {
+        //                if (playerCounter < 1)
+        //                {
+        //                    if (hit.point.y > MeshGenerator.MaxHeight * mapGenerator[StartRegionPlayer].height)
+        //                    {
+        //                        var player = Instantiate(Player, hit.point, Quaternion.identity);
+        //                        ++playerCounter;
+        //                        b_placePlayer = false;
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+    }
+
+
+    IEnumerator SpawnPlayer()
+    {
+        yield return new WaitForSeconds(1);
         //spawn Player
         if (b_placePlayer)
         {
@@ -83,6 +112,9 @@ public class ObjectiveSpawner : MonoBehaviour
             }
         }
     }
+
+
+
 
 
     //spawn Trees
