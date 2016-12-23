@@ -15,14 +15,13 @@ public class PlayerManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        Debug.Log(FirstPersonController.CanMove);
         if (AttackingZombies.Count >= 3)
         {
             FirstPersonController.TooManyZombies = true;
         }
         if (FirstPersonController.CanMove)
         {
-            //IsMoving und nicht isMoving...
             animator.SetBool("IsMoving", true);
         }
         else
