@@ -6,7 +6,7 @@ using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Utility;
 using Random = UnityEngine.Random;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 
 namespace UnityStandardAssets.Characters.FirstPerson
 {
@@ -264,6 +264,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
                         else
                         {
                             Destroy(this.gameObject);
+                            SceneManager.LoadScene("LooseScene");
                         }
                     }
                 }
