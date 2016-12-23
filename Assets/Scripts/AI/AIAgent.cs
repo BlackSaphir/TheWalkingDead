@@ -12,9 +12,14 @@ public class AIAgent : MonoBehaviour
     public Vector3 offset;
     private float rotationtime;
     private Vector3 velocity;
+    public AudioClip[] ZombieSounds;
+    public AudioSource SoundSource;
     // Use this for initialization
     void Start()
     {
+        SoundSource = GetComponent<AudioSource>();
+        SoundSource.clip = ZombieSounds[Random.Range(0, ZombieSounds.Length)];
+        SoundSource.Play();
         timer = 8;
         Player = FindObjectOfType<FirstPersonController>();
     }
