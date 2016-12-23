@@ -9,11 +9,9 @@ public class ObjectiveSpawner : MonoBehaviour
     public string EndRegionTree = "Grass";
     public string StartRegionZombies = "Forest";
     public string EndRegionZombies = "Grass";
-    public string StartRegionPlayer = "Dark Rock";
     public string StartRegionRescuePlatform = "Beach";
     public string EndRegionRescuePlatform = "Snow";
     public float Distance = 200.0f;
-    public Transform Player;
     public Transform Tree;
     public Transform Zombie;
     public Transform Barrel;
@@ -25,12 +23,10 @@ public class ObjectiveSpawner : MonoBehaviour
     public int ZombieGap = 16;
 
     private bool b_placeTrees = true;
-    private bool b_placePlayer = true;
     private bool b_placeZombies = true;
     private bool b_placeRescuePlatform = true;
     private int treeCounter;
     private int zombieCounter;
-    private int playerCounter;
     private int rescuePlatformCounter;
     private float[,] treeNoiseMap;
 
@@ -39,14 +35,12 @@ public class ObjectiveSpawner : MonoBehaviour
     void Awake()
     {
         treeNoiseMap = new float[MapGenerator.MapWidht, MapGenerator.MapHeight];
-        //StartCoroutine(SpawnPlayer());
         StartCoroutine(SpawnTree());
         StartCoroutine(SpawnZombies());
         StartCoroutine(SpawnRescuePlatform());
 
         treeCounter = 0;
         zombieCounter = 0;
-        playerCounter = 0;
         rescuePlatformCounter = 0;
 
     }
@@ -56,65 +50,7 @@ public class ObjectiveSpawner : MonoBehaviour
         mapGenerator = FindObjectOfType<MapGenerator>();
 
         treeNoiseMap = MapGenerator.NoiseMap;
-
-        ////spawn Player
-        //if (b_placePlayer)
-        //{
-        //    for (int x = 0; x < MapGenerator.MapWidht * MapScale; ++x)
-        //    {
-        //        for (int z = 0; z < MapGenerator.MapHeight * MapScale; ++z)
-        //        {
-        //            RaycastHit hit;
-        //            Vector3 position = transform.position + new Vector3(x, StartHeight, z);
-        //            if (Physics.Raycast(position, Vector3.down, out hit, Distance, GroundLayer, QueryTriggerInteraction.Ignore))
-        //            {
-        //                if (playerCounter < 1)
-        //                {
-        //                    if (hit.point.y > MeshGenerator.MaxHeight * mapGenerator[StartRegionPlayer].height)
-        //                    {
-        //                        var player = Instantiate(Player, hit.point, Quaternion.identity);
-        //                        ++playerCounter;
-        //                        b_placePlayer = false;
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
     }
-
-
-    //IEnumerator SpawnPlayer()
-    //{
-    //    yield return new WaitForSeconds(1);
-    //    //spawn Player
-    //    if (b_placePlayer)
-    //    {
-    //        for (int x = 0; x < MapGenerator.MapWidht * MapScale; ++x)
-    //        {
-    //            for (int z = 0; z < MapGenerator.MapHeight * MapScale; ++z)
-    //            {
-    //                RaycastHit hit;
-    //                Vector3 position = transform.position + new Vector3(x, StartHeight, z);
-    //                if (Physics.Raycast(position, Vector3.down, out hit, Distance, GroundLayer, QueryTriggerInteraction.Ignore))
-    //                {
-    //                    if (playerCounter < 1)
-    //                    {
-    //                        if (hit.point.y > MeshGenerator.MaxHeight * mapGenerator[StartRegionPlayer].height)
-    //                        {
-    //                            var player = Instantiate(Player, hit.point, Quaternion.identity);
-    //                            ++playerCounter;
-    //                            b_placePlayer = false;
-    //                        }
-    //                    }
-    //                }
-    //            }
-    //        }
-    //    }
-    //}
-
-
-
 
 
     //spawn Trees
@@ -148,14 +84,6 @@ public class ObjectiveSpawner : MonoBehaviour
     }
 
 
-
-
-
-
-
-
-
-
     // spawn Zombies
     IEnumerator SpawnZombies()
     {
@@ -183,6 +111,8 @@ public class ObjectiveSpawner : MonoBehaviour
             }
         }
     }
+
+
 
     //spawn RescuePlatform
     IEnumerator SpawnRescuePlatform()

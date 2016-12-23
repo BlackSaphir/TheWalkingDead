@@ -9,6 +9,15 @@ public class RadioTowerSpawner : MonoBehaviour
     public float Distance = 500.0f;
     public Transform RadioTower;
     public Transform Base;
+    public Transform BatteryBarrel;
+    public Transform CableBarrel;
+    public Transform EmptyBarrel1;
+    public Transform EmptyBarrel2;
+    public Transform EmptyBarrel3;
+    public Transform KeyBarrel;
+    public Transform LightBarrel;
+    public Transform PetrolBarrel;
+    public Transform RepairBarrel;
     public LayerMask GroundLayer;
     public float StartHeight = 305;
     public float MapScale = 10;
