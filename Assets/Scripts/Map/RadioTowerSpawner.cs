@@ -5,15 +5,16 @@ using UnityEngine.UI;
 
 public class RadioTowerSpawner : MonoBehaviour
 {
-    public string StartRegionRadioTower = "Rock";
-    public string EndRegionRadioTower = "Snow";
+    //public string StartRegionRadioTower = "Snow";
     public float Distance = 500.0f;
     public Transform RadioTower;
+    public Transform Base;
+    public Transform RescuePlatform;
     public LayerMask GroundLayer;
     public float StartHeight = 305;
     public float MapScale = 10;
 
-    private bool placeObjects = true;
+    private bool b_spawnRadioTower = true;
     //private float[,] treeNoiseMap;
     private int radioTowerCounter;
 
@@ -28,12 +29,12 @@ public class RadioTowerSpawner : MonoBehaviour
 
     }
 
-
+    //spawn RadioTower
     IEnumerator SpawnRadioTower()
     {
         mapGenerator = FindObjectOfType<MapGenerator>();
         yield return new WaitForSeconds(6);
-        if (placeObjects)
+        if (b_spawnRadioTower)
         {
             for (int z = 0; Mathf.Abs(z) < MapGenerator.MapWidht * MapScale; z--)
             {
@@ -45,7 +46,7 @@ public class RadioTowerSpawner : MonoBehaviour
                     {
                         if (radioTowerCounter < 1)
                         {
-                            if (hit.point.y > MeshGenerator.MaxHeight * mapGenerator[StartRegionRadioTower].height && hit.point.y < MeshGenerator.MaxHeight * mapGenerator[EndRegionRadioTower].height)
+                            if (hit.point.y == MeshGenerator.MaxHeight /** mapGenerator[StartRegionRadioTower].height*/)
                             {
                                 var radioTower = Instantiate(RadioTower, hit.point, Quaternion.identity);
                                 radioTower.Rotate(-90, 0, 0);
